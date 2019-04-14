@@ -7,7 +7,7 @@ Follow the following steps if you want to tryout
 ## Installation
 
 Download or clone the repo,
-Navigate to the folder you saved from command prompt and type ``` bash $ npm install ```
+Navigate to the folder you saved from command prompt and type ``` $ npm install ```
 
 or use git bash as follows
 
@@ -38,4 +38,5 @@ see also:
 [User Guide](CRA.md)
 
 Team Cozy
+
 Thank You,
