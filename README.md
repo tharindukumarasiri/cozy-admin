@@ -1,8 +1,7 @@
-##Cozy Administrator Pannel
+## Cozy Administrator Pannel
 
-Tis is the administrators pannel for the cozy mobile app
-please be advised tis is yet under construction
-follow the following steps if you want to tryout
+Tis is the administrators pannel for the cozy mobile app. Please be advised tis is yet under construction.
+Follow the following steps if you want to tryout
 
 ## Installation
 
