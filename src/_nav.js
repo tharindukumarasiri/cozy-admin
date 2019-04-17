@@ -156,6 +156,16 @@ export default {
       url: '/Form',
       icon: 'icon-note',
     },
+    {
+      name: 'Products',
+      url: '/Products',
+      icon: 'icon-list',
+    },
+    {
+      name: 'Branches',
+      url: '/Branches',
+      icon: 'icon-location-pin',
+    },
     // {
     //   name: 'Icons',
     //   url: '/icons',
