@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux'
+import { createProduct } from '../../store/actions/productActions'
+
 import {
   Badge,
   Button,
@@ -27,23 +30,37 @@ import {
 
 class Forms extends Component {
  
+  state = {
+    code: '',
+    name: ''
+  }
+  handleChange = (e) => {
+    this.setState({
+      [e.target.id]: e.target.value
+    })
+  }
+  handleSubmit = (e) => {
+    e.preventDefault();
+    // console.log(this.state);
+    this.props.createProduct(this.state);
+  }
+
   render() {
     return (
       <div className="animated fadeIn">
-        
-        
+      <Form action="" method="post" encType="multipart/form-data" className="form-horizontal" onSubmit={this.handleSubmit}>
             <Card>
               <CardHeader>
                 <strong>Input Furniture Details</strong>
               </CardHeader>
               <CardBody>
-                <Form action="" method="post" encType="multipart/form-data" className="form-horizontal">
+                
                   <FormGroup row>
                     <Col md="2">
                       <Label htmlFor="text-input">Product Code</Label>
                     </Col>
                     <Col xs="12" md="9">
-                      <Input type="text" id="text-input" name="text-input" placeholder="Product Code" />
+                      <Input type="text" id="code" placeholder="Product Code" onChange={this.handleChange} />
                       <FormText color="muted">Please enter a unique code</FormText>
                     </Col>
                   </FormGroup>
@@ -52,7 +69,7 @@ class Forms extends Component {
                       <Label htmlFor="text-input">Product Name</Label>
                     </Col>
                     <Col xs="12" md="9">
-                      <Input type="text" id="text-input" name="text-input" placeholder="Product Name" />
+                      <Input type="text" id="name" placeholder="Product Name" onChange={this.handleChange} />
                       <FormText color="muted">Name as in the catalogue</FormText>
                     </Col>
                   </FormGroup>
@@ -151,19 +168,24 @@ class Forms extends Component {
                     </Col>
                   </FormGroup>
                   
-                </Form>
+                
               </CardBody>
               <CardFooter>
                 <Button type="submit" size="sm" color="primary">Submit</Button>
                 <Button type="reset" size="sm" color="danger"> Cancel</Button>
               </CardFooter>
             </Card>
-          
+            </Form>
         
       </div>
     );
   }
 }
 
+const mapDispatchToProps = dispatch => {
+  return {
+    createProduct: (product) => dispatch(createProduct(product))
+  }
+}
 
-export default Forms;
+export default connect(null, mapDispatchToProps)(Forms);
