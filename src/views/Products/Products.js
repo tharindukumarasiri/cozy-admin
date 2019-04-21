@@ -1,4 +1,8 @@
 import React, { Component } from "react";
+import ProductList from './ProductList'
+import { connect } from 'react-redux'
+import { firestoreConnect } from 'react-redux-firebase'
+import { compose } from 'redux'
 import {
   Badge,
   Card,
@@ -14,6 +18,8 @@ import {
 
 class Products extends Component {
   render() {
+     // console.log(this.props);
+     const { products } = this.props;
     return (
       <div className="animated fadeIn">
         <Card>
@@ -21,6 +27,9 @@ class Products extends Component {
             <i className="fa fa-align-justify" /> Furniture
           </CardHeader>
           <CardBody>
+
+          <ProductList products={products} />
+          
             <Table responsive>
               <thead>
                 <tr>
@@ -130,4 +139,16 @@ class Products extends Component {
   }
 }
 
-export default Products;
+const mapStateToProps = (state) => {
+  console.log(state);
+  return {
+    products: state.firestore.ordered.projects
+  }
+}
+
+export default compose(
+  connect(mapStateToProps),
+  firestoreConnect([
+    { collection: 'products' }
+  ])
+)(Products);
