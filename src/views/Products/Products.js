@@ -146,9 +146,11 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default compose(
-  connect(mapStateToProps),
-  firestoreConnect([
-    { collection: 'products' }
-  ])
-)(Products);
+// export default compose(
+//   connect(mapStateToProps),
+//   firestoreConnect([
+//     { collection: 'products' }
+//   ])
+// )(Products);
+
+export default connect(mapStateToProps)(Products);
