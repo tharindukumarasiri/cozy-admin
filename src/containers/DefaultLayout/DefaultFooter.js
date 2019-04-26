@@ -16,7 +16,7 @@ class DefaultFooter extends Component {
     return (
       <React.Fragment>
         <span> &copy; 2019 Team Cozy.</span>
-        <span className="ml-auto">Powered by <a href="https://coreui.io/react">Cozy Mobile App</a></span>
+        <span className="ml-auto">Powered by <a href="https://play.google.com/store/apps">Cozy Mobile App</a></span>
       </React.Fragment>
     );
   }
