@@ -28,7 +28,7 @@ class Products extends Component {
           </CardHeader>
           <CardBody>
 
-          <ProductList products={products} />
+          
           
             <Table responsive>
               <thead>
@@ -46,17 +46,8 @@ class Products extends Component {
               </thead>
               <tbody>
                 <tr>
-                  <td>Samppa Nori</td>
-                  <td>2012/01/01</td>
-                  <td>Member</td>
-                  <td />
-                  <td />
-                  <td />
-                  <td />
-                  <td />
-                  <td>
-                    <Badge color="success">Available</Badge>
-                  </td>
+                  <td><ProductList products={products} /></td>
+                  
                 </tr>
                 <tr>
                   <td>Estavan Lykos</td>
@@ -142,15 +133,15 @@ class Products extends Component {
 const mapStateToProps = (state) => {
   console.log(state);
   return {
-    products: state.firestore.ordered.projects
+    products: state.firestore.ordered.products
   }
 }
 
-// export default compose(
-//   connect(mapStateToProps),
-//   firestoreConnect([
-//     { collection: 'products' }
-//   ])
-// )(Products);
+export default compose(
+  connect(mapStateToProps),
+  firestoreConnect([
+    { collection: 'products' }
+  ])
+)(Products);
 
-export default connect(mapStateToProps)(Products);
+// export default connect(mapStateToProps)(Products);

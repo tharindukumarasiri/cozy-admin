@@ -1,15 +1,22 @@
 import React from 'react'
+import { Table } from "reactstrap";
 
-const ProductSummary = ({product}) => {
+const ProductSummary = ({ product }) => {
   return (
+    // <div>
+    //   <Table responsive>
+    //     <tbody>
+    //       <tr>
+    //         <td>{product.code}</td>
+    //         <td>{product.name}</td>
+    //       </tr>
+    //     </tbody>
+    //   </Table>
+    // </div>
     <div>
-      {/* <tr>
-      <td>{product.id}</td>
-          <td>{product.title}</td>
-          <td>{product.content}</td>
-      </tr> */}
-      <p>{product.code}</p>
-      <p>{product.name}</p>
+      <td>{product.code}</td>
+      <td>{product.name}</td>
+      <td>{product.authorFirstName}</td>
     </div>
   )
 }
