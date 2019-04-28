@@ -27,8 +27,6 @@ class Products extends Component {
             <i className="fa fa-align-justify" /> Furniture
           </CardHeader>
           <CardBody>
-
-          
           
             <Table responsive>
               <thead>
