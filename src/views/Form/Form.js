@@ -79,7 +79,7 @@ class Forms extends Component {
   toggle() {
     this.setState({
       modal: !this.state.modal,
-      
+
     });
   }
   toggleLarge() {
@@ -102,7 +102,6 @@ class Forms extends Component {
               <strong>Insert Furniture Details</strong>
             </CardHeader>
             <CardBody>
-
               <FormGroup row>
                 <Col md="2">
                   <Label htmlFor="text-input">Product Code</Label>
@@ -164,7 +163,7 @@ class Forms extends Component {
                   <Label htmlFor="select">Timber</Label>
                 </Col>
                 <Col xs="12" md="7">
-                  <Input type="select" name="select" id="select">
+                  <Input type="select" name="select" id="select" disabled={this.state.material !== 'Wood'} >
                     <option value="0">Please select</option>
                     <option value="1">Mahogany</option>
                     <option value="2">Teak</option>
@@ -230,7 +229,7 @@ class Forms extends Component {
                   <Label htmlFor="textarea-input">Description</Label>
                 </Col>
                 <Col xs="12" md="9">
-                  <Input type="textarea" id="description" rows="6" placeholder="Please add a short description" onChange={this.handleChange} />
+                  <Input type="textarea" id="description" rows="7" placeholder="Please add a short description" onChange={this.handleChange} />
                 </Col>
               </FormGroup>
               <FormGroup row>
@@ -238,14 +237,14 @@ class Forms extends Component {
                   <Label htmlFor="prependedInput">Price</Label>
                 </Col>
                 <Col md="6">
-                <div className="controls">
-                  <InputGroup className="input-prepend">
-                    <InputGroupAddon addonType="prepend">
-                      <InputGroupText>Rs.</InputGroupText>
-                    </InputGroupAddon>
-                    <Input id="price" size="16" type="text" onChange={this.handleChange} />
-                  </InputGroup>
-                </div>
+                  <div className="controls">
+                    <InputGroup className="input-prepend">
+                      <InputGroupAddon addonType="prepend">
+                        <InputGroupText>Rs.</InputGroupText>
+                      </InputGroupAddon>
+                      <Input id="price" size="16" type="text" onChange={this.handleChange} />
+                    </InputGroup>
+                  </div>
                 </Col>
               </FormGroup>
               <FormGroup row>
@@ -263,22 +262,28 @@ class Forms extends Component {
                   </FormGroup>
                 </Col>
               </FormGroup>
-
-
+              <FormGroup row>
+                <Col md="2">
+                  <Label htmlFor="file-multiple-input">Add Pictures</Label>
+                </Col>
+                <Col xs="12" md="9">
+                  <Input type="file" id="file-multiple-input" name="file-multiple-input" multiple />
+                </Col>
+              </FormGroup>
             </CardBody>
             <CardFooter>
               <Button size="sm" color="primary" onClick={this.toggleInfo} className="mr-2" >Submit</Button>
               <Modal isOpen={this.state.info} toggle={this.toggleInfo} className={'modal-info ' + this.props.className}>
-                    <ModalHeader toggle={this.toggleInfo}>Are You Sure You Want To Save</ModalHeader>
-                    <ModalFooter>
-                    <Col md="2">
-                      <Button type="submit" form="myform" color="success" onClick={this.toggleInfo}>Yes</Button>{' '}
-                      </Col>
-                      <Col md="6">
-                      <Button color="danger" onClick={this.toggleInfo}>Cancel</Button>
-                      </Col>
-                    </ModalFooter>
-                  </Modal>
+                <ModalHeader toggle={this.toggleInfo}>Are You Sure You Want To Save</ModalHeader>
+                <ModalFooter>
+                  <Col md="2">
+                    <Button type="submit" form="myform" color="success" onClick={this.toggleInfo}>Yes</Button>{' '}
+                  </Col>
+                  <Col md="6">
+                    <Button color="danger" onClick={this.toggleInfo}>Cancel</Button>
+                  </Col>
+                </ModalFooter>
+              </Modal>
               <Button type="reset" size="sm" color="danger"> Cancel</Button>
             </CardFooter>
           </Card>
