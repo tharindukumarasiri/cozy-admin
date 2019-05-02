@@ -229,7 +229,7 @@ class Forms extends Component {
                   <Label htmlFor="textarea-input">Description</Label>
                 </Col>
                 <Col xs="12" md="9">
-                  <Input type="textarea" id="description" rows="7" placeholder="Please add a short description" onChange={this.handleChange} />
+                  <Input type="textarea" id="description" rows="6" placeholder="Please add a short description" onChange={this.handleChange} />
                 </Col>
               </FormGroup>
               <FormGroup row>
@@ -264,10 +264,18 @@ class Forms extends Component {
               </FormGroup>
               <FormGroup row>
                 <Col md="2">
-                  <Label htmlFor="file-multiple-input">Add Pictures</Label>
+                  <Label htmlFor="file-multiple-input">Upload Pictures</Label>
                 </Col>
                 <Col xs="12" md="9">
                   <Input type="file" id="file-multiple-input" name="file-multiple-input" multiple />
+                </Col>
+              </FormGroup>
+              <FormGroup row>
+                <Col md="2">
+                  <Label htmlFor="file-multiple-input">Upload 3D Model</Label>
+                </Col>
+                <Col xs="12" md="9">
+                  <Input type="file" id="file-multiple-input" name="file-multiple-input" />
                 </Col>
               </FormGroup>
             </CardBody>
