@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
+import { Alert, Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
+import { connect } from 'react-redux'
+import { signIn } from '../../../store/actions/authActions'
 
 class Login extends Component {
   state = {
@@ -14,10 +16,11 @@ class Login extends Component {
   }
   handleSubmit = (e) => {
     e.preventDefault();
-    console.log(this.state);
+    this.props.signIn(this.state)
   }
 
   render() {
+    const { authError } = this.props;
     return (
       <div className="app flex-row align-items-center">
         <Container>
@@ -53,7 +56,18 @@ class Login extends Component {
                           <Button color="link" className="px-0">Forgot password?</Button>
                         </Col>
                       </Row>
+                      <br></br>
+                      <Row>
+                      <Col xs="12">
+                      <div className="center red-text">
+                        {authError ? <Alert color="danger">
+                          Wrong Username or Passwoard!
+                        </Alert> : null}
+                      </div>
+                      </Col>
+                    </Row>
                     </Form>
+                    
                   </CardBody>
                 </Card>
                 <Card className="text-white bg-primary py-5 d-md-down-none" style={{ width: '44%' }}>
@@ -65,15 +79,29 @@ class Login extends Component {
                         <Button color="primary" className="mt-3" active tabIndex={-1}>Register Now!</Button>
                       </Link>
                     </div>
+
                   </CardBody>
                 </Card>
               </CardGroup>
             </Col>
           </Row>
+
         </Container>
       </div>
     );
   }
 }
 
-export default Login;
+const mapStateToProps = (state) => {
+  return {
+    authError: state.auth.authError
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    signIn: (creds) => dispatch(signIn(creds))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
