@@ -58,16 +58,16 @@ class Login extends Component {
                       </Row>
                       <br></br>
                       <Row>
-                      <Col xs="12">
-                      <div className="center red-text">
-                        {authError ? <Alert color="danger">
-                          Wrong Username or Passwoard!
+                        <Col xs="12">
+                          <div className="center red-text">
+                            {authError ? <Alert color="danger">
+                              Wrong Username or Passwoard!
                         </Alert> : null}
-                      </div>
-                      </Col>
-                    </Row>
+                          </div>
+                        </Col>
+                      </Row>
                     </Form>
-                    
+
                   </CardBody>
                 </Card>
                 <Card className="text-white bg-primary py-5 d-md-down-none" style={{ width: '44%' }}>

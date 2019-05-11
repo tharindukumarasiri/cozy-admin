@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import { Button, Card, CardBody, CardFooter, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
+import { Button, Card, CardBody, CardFooter, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row, Alert } from 'reactstrap';
+import { Redirect } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { signUp } from '../../../store/actions/authActions'
 
 class Register extends Component {
   state = {
@@ -15,9 +18,10 @@ class Register extends Component {
   }
   handleSubmit = (e) => {
     e.preventDefault();
-    console.log(this.state);
+    this.props.signUp(this.state);
   }
   render() {
+    const { auth, authError } = this.props;
     return (
       <div className="app flex-row align-items-center">
         <Container>
@@ -68,6 +72,14 @@ class Register extends Component {
                     </InputGroup>
                     <Button color="success" block>Create Account</Button>
                   </Form>
+                  <br></br>
+                  <Row>
+                        <Col xs="12">
+                          <div className="center red-text">
+                          { authError ? <Alert color="danger">{authError}</Alert> : null }
+                          </div>
+                        </Col>
+                      </Row>
                 </CardBody>
                 <CardFooter className="p-4">
                   <Row>
@@ -86,6 +98,20 @@ class Register extends Component {
       </div>
     );
   }
+
 }
 
-export default Register;
+const mapStateToProps = (state) => {
+  return {
+    auth: state.firebase.auth,
+    authError: state.auth.authError
+  }
+}
+
+const mapDispatchToProps = (dispatch)=> {
+  return {
+    signUp: (creds) => dispatch(signUp(creds))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Register);
