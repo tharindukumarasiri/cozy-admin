@@ -18,11 +18,22 @@ import {
 
 class Products extends Component {
   render() {
-     // console.log(this.props);
-     const { products } = this.props;
+    // console.log(this.props);
+    const { products } = this.props;
     return (
       <div className="animated fadeIn">
-        <Card>
+        {/* <Card> */}
+        {/* <Row> */}
+          {/* <Col xs="12" sm="6" md="4"> */}
+          <section>
+          {/* <Card> */}
+            <ProductList products={products} />
+            </section>
+          {/* </Card> */}
+          {/* </Col> */}
+        {/* </Row> */}
+        {/* </Card> */}
+        {/* <Card>
           <CardHeader>
             <i className="fa fa-align-justify" /> Furniture
           </CardHeader>
@@ -122,7 +133,7 @@ class Products extends Component {
                 </PaginationItem>
               </Pagination>
           </CardBody>
-        </Card>
+        </Card> */}
       </div>
     );
   }
