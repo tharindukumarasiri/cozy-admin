@@ -1,6 +1,6 @@
 ## Cozy Administrator Pannel
 
-This is the administrators panel for the cozy mobile app. Please be advised tis is yet under construction.
+This is the administrators panel for the cozy mobile app. Please be advised this is yet under construction.
 
 Follow the following steps if you want to tryout
 
