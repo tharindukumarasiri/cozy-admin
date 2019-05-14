@@ -2,7 +2,7 @@
 
 This is the administrators panel for the cozy mobile app. Please be advised this is yet under construction.
 
-Follow the following steps if you want to tryout
+Follow the following steps if you want to try out
 
 ## Installation
 
