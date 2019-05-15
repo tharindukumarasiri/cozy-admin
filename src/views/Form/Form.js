@@ -130,7 +130,8 @@ class Forms extends Component {
         price: this.state.price,
         description: this.state.description,
         category: this.state.category,
-        image: this.state.image
+        image: this.state.image,
+        model: this.state.Item
       })
       this.setState({ image: "" });
     }
@@ -155,6 +156,22 @@ class Forms extends Component {
   };
 
   //uploading Model item
+  handleUploadStartItem = () => this.setState({ isUploadingItem: true, progressItem: 0 });
+  handleProgressItem = progressItem => this.setState({ progressItem });
+  handleUploadErrorItem = error => {
+    this.setState({ isUploadingItem: false });
+    console.error(error);
+  };
+  handleUploadSuccessItem = filename => {
+    this.setState({ progress: 100, isUploadingItem: false });
+    firebase
+      .storage()
+      .ref("models")
+      .child(filename)
+      .getDownloadURL()
+      .then(url => this.setState({ Item: url }))
+      console.log(url);
+  };
 
   // handleChange = (e) => {
   //   this.setState({
@@ -400,7 +417,17 @@ class Forms extends Component {
                   <Label htmlFor="file-multiple-input">Upload 3D Model</Label>
                 </Col>
                 <Col xs="12" md="9">
-                  <Input type="file" id="file-multiple-input" name="file-multiple-input" />
+                  {this.state.isUploadingItem && <p>Progress: {this.state.progressItem}</p>}
+                  <FileUploader
+                    accept="image/*"
+                    name="avatar"
+                    randomizeFilename
+                    storageRef={firebase.storage().ref("models")}
+                    onUploadStartItem={this.handleUploadStartItem}
+                    onUploadErrorItem={this.handleUploadErrorItem}
+                    onUploadSuccessItem={this.handleUploadSuccessItem}
+                    onProgressItem={this.handleProgressItem}
+                  />
                 </Col>
               </FormGroup>
             </CardBody>
