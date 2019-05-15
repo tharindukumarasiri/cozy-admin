@@ -170,7 +170,6 @@ class Forms extends Component {
       .child(filename)
       .getDownloadURL()
       .then(url => this.setState({ Item: url }))
-      console.log(url);
   };
 
   // handleChange = (e) => {
@@ -400,16 +399,20 @@ class Forms extends Component {
                 <Col xs="12" md="9">
                   {this.state.isUploading && <p>Progress: {this.state.progress}</p>}
                   {this.state.image && <img src={this.state.image} border="3" height="100" width="100" />}
+                  <label style={{ backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, pointer: 'cursor' }}>
+                    Select your Image
                   <FileUploader
-                    accept="image/*"
-                    name="avatar"
-                    randomizeFilename
-                    storageRef={firebase.storage().ref("images")}
-                    onUploadStart={this.handleUploadStart}
-                    onUploadError={this.handleUploadError}
-                    onUploadSuccess={this.handleUploadSuccess}
-                    onProgress={this.handleProgress}
-                  />
+                      hidden
+                      accept="image/*"
+                      name="avatar"
+                      randomizeFilename
+                      storageRef={firebase.storage().ref("images")}
+                      onUploadStart={this.handleUploadStart}
+                      onUploadError={this.handleUploadError}
+                      onUploadSuccess={this.handleUploadSuccess}
+                      onProgress={this.handleProgress}
+                    />
+                  </label>
                 </Col>
               </FormGroup>
               <FormGroup row>
@@ -418,16 +421,19 @@ class Forms extends Component {
                 </Col>
                 <Col xs="12" md="9">
                   {this.state.isUploadingItem && <p>Progress: {this.state.progressItem}</p>}
+                  <label style={{ backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, pointer: 'cursor' }}>
+                    Choose your File
                   <FileUploader
-                    accept="image/*"
-                    name="avatar"
-                    randomizeFilename
-                    storageRef={firebase.storage().ref("models")}
-                    onUploadStartItem={this.handleUploadStartItem}
-                    onUploadErrorItem={this.handleUploadErrorItem}
-                    onUploadSuccessItem={this.handleUploadSuccessItem}
-                    onProgressItem={this.handleProgressItem}
-                  />
+                      hidden
+                      accept="image/*"
+                      randomizeFilename
+                      storageRef={firebase.storage().ref("models")}
+                      onUploadStartItem={this.handleUploadStartItem}
+                      onUploadErrorItem={this.handleUploadErrorItem}
+                      onUploadSuccessItem={this.handleUploadSuccessItem}
+                      onProgressItem={this.handleProgressItem}
+                    />
+                  </label>
                 </Col>
               </FormGroup>
             </CardBody>
