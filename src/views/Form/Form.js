@@ -211,11 +211,11 @@ class Forms extends Component {
                 <Col xs="12" md="9">
                   <Input type="select" id="category" onChange={(evt) => this.onChangeHandler(evt, 'category')}>
                     <option value="0">Please select</option>
-                    <option value="Living">cat1</option>
-                    <option value="Dining">cat2</option>
-                    <option value="Bedroom">cat3</option>
-                    <option value="Patio">cat4</option>
-                    <option value="Other">cat5</option>
+                    <option value="cat1">cat1</option>
+                    <option value="cat2">cat2</option>
+                    <option value="cat3">cat3</option>
+                    <option value="cat4">cat4</option>
+                    <option value="cat5">cat5</option>
                   </Input>
                 </Col>
               </FormGroup>
