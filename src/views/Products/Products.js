@@ -38,8 +38,13 @@ class Products extends Component {
     this.db.ref('products').on('child_added', snapshot => {
       let product = {
         id: snapshot.key,
+        code: snapshot.val().code,
+        name: snapshot.val().name,
+        material: snapshot.val().material,
+        stock: snapshot.val().stock,
+        price: snapshot.val().price,
+        description: snapshot.val().description,
         category: snapshot.val().category,
-        code: snapshot.val().code
       }
 
       let products = this.state.products;
