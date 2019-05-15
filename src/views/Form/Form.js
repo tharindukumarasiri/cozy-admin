@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { createProduct } from '../../store/actions/productActions'
+import * as firebase from 'firebase';
 
 import {
   Badge,
@@ -34,69 +35,152 @@ import {
 
 class Forms extends Component {
 
-  state = {
-    code: '',
-    name: '',
-    price: '',
-    material: '',
-    description: '',
-    category: ''
-  }
-  handleChange = (e) => {
-    this.setState({
-      [e.target.id]: e.target.value
-    })
-  }
-  handleSubmit = (e) => {
-    e.preventDefault();
-    // console.log(this.state);
-    this.props.createProduct(this.state);
-    document.getElementById("myform").reset();
-  }
-  handleOptionChange = changeEvent => {
-    this.setState({
-      material: changeEvent.target.value
-    });
-  }
-  handleStockChange = changeEvent => {
-    this.setState({
-      stock: changeEvent.target.value
-    });
-  }
+  // constructor () {
+  //   super();
+  //   this.state = {
+  //     title: '',
+  //     note: ''
+  //   }
 
-  constructor(props) {
-    super(props);
+  //   this.createNote = this.createNote.bind(this);
+  // }
+
+  // onChangeHandler (evt, key) {
+  //   this.setState({
+  //     [key]: evt.target.value
+  //   });
+  // }
+
+  // createNote () {
+  //   if (this.state.title !== '' && this.state.note !== '') {
+  //     firebase.database().ref('notes').push({
+  //       title: this.state.title,
+  //       note: this.state.note
+  //     })
+  //   }
+  // }
+
+  //   render() {
+  //     return (
+  //       <div>
+  //         <h3>Create New Note</h3>
+  //         <div className="form-group">
+  //           <label htmlFor="noteform-title">Title</label>
+  //           <input type="text" id="noteform-title" name="noteform-title" value={this.state.title} onChange={(evt) => this.onChangeHandler(evt, 'title')} />
+  //         </div>
+  //         <div className="form-group">
+  //           <label htmlFor="noteform-note">Note</label>
+  //           <textarea name="noteform-note" id="noteform-note" value={this.state.note} onChange={(evt) => this.onChangeHandler(evt, 'note')}></textarea>
+  //         </div>
+  //         <button onClick={this.createNote}>Create Note</button>
+  //       </div>
+  //     )
+  //   }
+  // }
+
+  // export default Forms;
+
+
+
+
+
+
+
+
+
+  constructor() {
+    super();
     this.state = {
-      modal: false,
-      large: false,
-      info: false,
-    };
+      code: '',
+      name: '',
+      material: '',
+      stock: '',
+      price: '',
+      description: '',
+      category: '',
 
-    this.toggle = this.toggle.bind(this);
-    this.toggleInfo = this.toggleInfo.bind(this);
-    this.toggleLarge = this.toggleLarge.bind(this);
-  }
-  toggle() {
-    this.setState({
-      modal: !this.state.modal,
+    }
 
-    });
+    this.createNote = this.createNote.bind(this);
+    
   }
-  toggleLarge() {
+
+  onChangeHandler (evt, key) {
     this.setState({
-      large: !this.state.large,
+      [key]: evt.target.value
     });
   }
-  toggleInfo() {
-    this.setState({
-      info: !this.state.info,
-    });
+
+  createNote () {
+    if (this.state.code !== '' && this.state.name !== '') {
+      firebase.database().ref('products').push({
+        code: this.state.code,
+        name: this.state.name,
+        material: this.state.material,
+        stock: this.state.stock,
+        price: this.state.price,
+        description: this.state.description,
+        category: this.state.category
+      })
+    }
   }
+
+
+  // handleChange = (e) => {
+  //   this.setState({
+  //     [e.target.id]: e.target.value
+  //   })
+  // }
+  // handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   // console.log(this.state);
+  //   this.props.createProduct(this.state);
+  //   document.getElementById("myform").reset();
+  // }
+  // handleOptionChange = changeEvent => {
+  //   this.setState({
+  //     material: changeEvent.target.value
+  //   });
+  // }
+  // handleStockChange = changeEvent => {
+  //   this.setState({
+  //     stock: changeEvent.target.value
+  //   });
+  // }
+
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //     modal: false,
+  //     large: false,
+  //     info: false,
+  //   };
+
+  //   this.toggle = this.toggle.bind(this);
+  //   this.toggleInfo = this.toggleInfo.bind(this);
+  //   this.toggleLarge = this.toggleLarge.bind(this);
+  // }
+  // toggle() {
+  //   this.setState({
+  //     modal: !this.state.modal,
+
+  //   });
+  // }
+  // toggleLarge() {
+  //   this.setState({
+  //     large: !this.state.large,
+  //   });
+  // }
+  // toggleInfo() {
+  //   this.setState({
+  //     info: !this.state.info,
+  //   });
+  // }
 
   render() {
     return (
       <div className="animated fadeIn">
-        <Form id="myform" action="" method="post" encType="multipart/form-data" className="form-horizontal" onSubmit={this.handleSubmit}>
+        <Form id="myform" action="" encType="multipart/form-data" className="form-horizontal" >
           <Card>
             <CardHeader>
               <strong>Insert Furniture Details</strong>
@@ -107,7 +191,7 @@ class Forms extends Component {
                   <Label htmlFor="text-input">Product Code</Label>
                 </Col>
                 <Col xs="12" md="9">
-                  <Input type="text" id="code" placeholder="Product Code" onChange={this.handleChange} />
+                  <Input type="text" id="code" placeholder="Product Code" onChange={(evt) => this.onChangeHandler(evt, 'code')} />
                   <FormText color="muted">Please enter the unique code in catalogue</FormText>
                 </Col>
               </FormGroup>
@@ -116,7 +200,7 @@ class Forms extends Component {
                   <Label htmlFor="text-input">Product Name</Label>
                 </Col>
                 <Col xs="12" md="9">
-                  <Input type="text" id="name" placeholder="Product Name" onChange={this.handleChange} />
+                  <Input type="text" id="name" placeholder="Product Name" onChange={(evt) => this.onChangeHandler(evt, 'name')} />
                   <FormText color="muted">Name as in the catalogue</FormText>
                 </Col>
               </FormGroup>
@@ -125,13 +209,13 @@ class Forms extends Component {
                   <Label htmlFor="select">Category</Label>
                 </Col>
                 <Col xs="12" md="9">
-                  <Input type="select" id="category" onChange={this.handleChange}>
+                  <Input type="select" id="category" onChange={(evt) => this.onChangeHandler(evt, 'category')}>
                     <option value="0">Please select</option>
-                    <option value="Living">Living</option>
-                    <option value="Dining">Dining</option>
-                    <option value="Bedroom">Bedroom</option>
-                    <option value="Patio">Patio Furniture</option>
-                    <option value="Other">Other</option>
+                    <option value="Living">cat1</option>
+                    <option value="Dining">cat2</option>
+                    <option value="Bedroom">cat3</option>
+                    <option value="Patio">cat4</option>
+                    <option value="Other">cat5</option>
                   </Input>
                 </Col>
               </FormGroup>
@@ -141,19 +225,19 @@ class Forms extends Component {
                 </Col>
                 <Col md="9">
                   <FormGroup check inline>
-                    <Input className="form-check-input" type="radio" id="wood" name="material" value="Wood" checked={this.state.material === 'Wood'} onChange={this.handleOptionChange} />
+                    <Input className="form-check-input" type="radio" id="wood" name="material" value="Wood" checked={this.state.material  === 'Wood'} onChange={(evt) => this.onChangeHandler(evt, 'material')} />
                     <Label className="form-check-label" check htmlFor="wood">Wood</Label>
                   </FormGroup>
                   <FormGroup check inline>
-                    <Input className="form-check-input" type="radio" id="plastic" name="material" value="Plastic" checked={this.state.material === 'Plastic'} onChange={this.handleOptionChange} />
+                    <Input className="form-check-input" type="radio" id="plastic" name="material" value="Plastic" checked={this.state.material === 'Plastic'} onChange={(evt) => this.onChangeHandler(evt, 'material')} />
                     <Label className="form-check-label" check htmlFor="plastic">Plastic</Label>
                   </FormGroup>
                   <FormGroup check inline>
-                    <Input className="form-check-input" type="radio" id="metal" name="material" value="Metal" checked={this.state.material === 'Metal'} onChange={this.handleOptionChange} />
+                    <Input className="form-check-input" type="radio" id="metal" name="material" value="Metal" checked={this.state.material === 'Metal'} onChange={(evt) => this.onChangeHandler(evt, 'material')} />
                     <Label className="form-check-label" check htmlFor="metal">Metal</Label>
                   </FormGroup>
                   <FormGroup check inline>
-                    <Input className="form-check-input" type="radio" id="other" name="material" value="Other" checked={this.state.material === 'Other'} onChange={this.handleOptionChange} />
+                    <Input className="form-check-input" type="radio" id="other" name="material" value="Other" checked={this.state.material === 'Other'} onChange={(evt) => this.onChangeHandler(evt, 'material')} />
                     <Label className="form-check-label" check htmlFor="other">Other</Label>
                   </FormGroup>
                 </Col>
@@ -171,7 +255,7 @@ class Forms extends Component {
                   </Input>
                 </Col>
                 <Col xs="6" md="2">
-                  <Button block color="secondary" onClick={this.toggleLarge} className="mr-1"> Edit </Button>
+                  <Button block color="secondary" className="mr-1"> Edit </Button>
                   <Modal isOpen={this.state.large} toggle={this.toggleLarge} className={'modal-lg ' + this.props.className}>
                     <ModalHeader toggle={this.toggleLarge}>Edit Timber Types</ModalHeader>
                     <ModalBody>
@@ -204,8 +288,8 @@ class Forms extends Component {
                   </Input>
                 </Col>
                 <Col xs="6" md="2">
-                  <Button block color="secondary" onClick={this.toggle} className="mr-1"> Edit </Button>
-                  <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
+                  <Button block color="secondary" className="mr-1"> Edit </Button>
+                  {/* <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
                     <ModalHeader toggle={this.toggle}>Edit Colours</ModalHeader>
                     <ModalBody>
                       <Input type="text" placeholder="Colour" /><br></br>
@@ -221,7 +305,7 @@ class Forms extends Component {
                       <Button color="success" onClick={this.toggle}>Save</Button>{' '}
                       <Button color="secondary" onClick={this.toggle}>Cancel</Button>
                     </ModalFooter>
-                  </Modal>
+                  </Modal> */}
                 </Col>
               </FormGroup>
               <FormGroup row>
@@ -229,7 +313,7 @@ class Forms extends Component {
                   <Label htmlFor="textarea-input">Description</Label>
                 </Col>
                 <Col xs="12" md="9">
-                  <Input type="textarea" id="description" rows="6" placeholder="Please add a short description" onChange={this.handleChange} />
+                  <Input type="textarea" id="description" rows="6" placeholder="Please add a short description" onChange={(evt) => this.onChangeHandler(evt, 'description')} />
                 </Col>
               </FormGroup>
               <FormGroup row>
@@ -242,7 +326,7 @@ class Forms extends Component {
                       <InputGroupAddon addonType="prepend">
                         <InputGroupText>Rs.</InputGroupText>
                       </InputGroupAddon>
-                      <Input id="price" size="16" type="text" onChange={this.handleChange} />
+                      <Input id="price" size="16" type="text" onChange={(evt) => this.onChangeHandler(evt, 'price')} />
                     </InputGroup>
                   </div>
                 </Col>
@@ -253,11 +337,11 @@ class Forms extends Component {
                 </Col>
                 <Col md="9">
                   <FormGroup check inline>
-                    <Input className="form-check-input" type="radio" id="available" name="stocks" value="Available" checked={this.state.stock === 'Available'} onChange={this.handleStockChange} />
+                    <Input className="form-check-input" type="radio" id="available" name="stocks" value="Available" checked={this.state.stock === 'Available'} onChange={(evt) => this.onChangeHandler(evt, 'stock')} />
                     <Label className="form-check-label" check htmlFor="available">Available</Label>
                   </FormGroup>
                   <FormGroup check inline>
-                    <Input className="form-check-input" type="radio" id="notavailable" name="stocks" value="Not Available" checked={this.state.stock === 'Not Available'} onChange={this.handleStockChange} />
+                    <Input className="form-check-input" type="radio" id="notavailable" name="stocks" value="Not Available" checked={this.state.stock === 'Not Available'} onChange={(evt) => this.onChangeHandler(evt, 'stock')} />
                     <Label className="form-check-label" check htmlFor="notavailable">Out of Stock</Label>
                   </FormGroup>
                 </Col>
@@ -280,7 +364,7 @@ class Forms extends Component {
               </FormGroup>
             </CardBody>
             <CardFooter>
-              <Button size="sm" color="primary" onClick={this.toggleInfo} className="mr-2" >Submit</Button>
+              <Button size="sm" type="reset" onClick={this.createNote} color="primary" className="mr-2" >Submit</Button>
               <Modal isOpen={this.state.info} toggle={this.toggleInfo} className={'modal-info ' + this.props.className}>
                 <ModalHeader toggle={this.toggleInfo}>Are You Sure You Want To Save</ModalHeader>
                 <ModalFooter>
@@ -302,10 +386,10 @@ class Forms extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch => {
-  return {
-    createProduct: (product) => dispatch(createProduct(product))
-  }
-}
+// const mapDispatchToProps = dispatch => {
+//   return {
+//     createProduct: (product) => dispatch(createProduct(product))
+//   }
+// }
 
-export default connect(null, mapDispatchToProps)(Forms);
+export default Forms;
