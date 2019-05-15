@@ -45,11 +45,16 @@ export class ProductsView extends Component {
             <i className="fa fa-align-justify"></i> Product List
             </CardHeader>
           <CardBody>
-            <Table>
+            <Table responsive>
               <thead>
                 <tr>
                   <th>code</th>
+                  <th>name</th>
                   <th>category</th>
+                  <th>material</th>
+                  <th>description</th>
+                  <th>price</th>
+                  <th>stock</th>
                 </tr>
               </thead>
 
@@ -57,7 +62,12 @@ export class ProductsView extends Component {
                 <tbody>
                   <tr key={product.id}>
                     <td>{product.code}</td>
+                    <td>{product.name}</td>
                     <td>{product.category}</td>
+                    <td>{product.material}</td>
+                    <td>{product.description}</td>
+                    <td>{product.price}</td>
+                    <td>{product.stock}</td>
                   </tr>
                 </tbody>
               ))}
