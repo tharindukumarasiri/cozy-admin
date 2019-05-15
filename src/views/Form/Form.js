@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { createProduct } from '../../store/actions/productActions'
 import * as firebase from 'firebase';
-
+import FileUploader from "react-firebase-file-uploader";
 import {
   Badge,
   Button,
@@ -99,19 +99,28 @@ class Forms extends Component {
       description: '',
       category: '',
 
+      avatar: "",
+      isUploading: false,
+      progress: 0,
+      image: "",
+
+      isUploadingItem: false,
+      progressItem: 0,
+      Item: ""
+
     }
 
     this.createNote = this.createNote.bind(this);
-    
+
   }
 
-  onChangeHandler (evt, key) {
+  onChangeHandler(evt, key) {
     this.setState({
       [key]: evt.target.value
     });
   }
 
-  createNote () {
+  createNote() {
     if (this.state.code !== '' && this.state.name !== '') {
       firebase.database().ref('products').push({
         code: this.state.code,
@@ -120,11 +129,32 @@ class Forms extends Component {
         stock: this.state.stock,
         price: this.state.price,
         description: this.state.description,
-        category: this.state.category
+        category: this.state.category,
+        image: this.state.image
       })
+      this.setState({ image: "" });
     }
   }
 
+
+  //Uploading Image
+  handleUploadStart = () => this.setState({ isUploading: true, progress: 0 });
+  handleProgress = progress => this.setState({ progress });
+  handleUploadError = error => {
+    this.setState({ isUploading: false });
+    console.error(error);
+  };
+  handleUploadSuccess = filename => {
+    this.setState({ avatar: filename, progress: 100, isUploading: false });
+    firebase
+      .storage()
+      .ref("images")
+      .child(filename)
+      .getDownloadURL()
+      .then(url => this.setState({ image: url }));
+  };
+
+  //uploading Model item
 
   // handleChange = (e) => {
   //   this.setState({
@@ -225,7 +255,7 @@ class Forms extends Component {
                 </Col>
                 <Col md="9">
                   <FormGroup check inline>
-                    <Input className="form-check-input" type="radio" id="wood" name="material" value="Wood" checked={this.state.material  === 'Wood'} onChange={(evt) => this.onChangeHandler(evt, 'material')} />
+                    <Input className="form-check-input" type="radio" id="wood" name="material" value="Wood" checked={this.state.material === 'Wood'} onChange={(evt) => this.onChangeHandler(evt, 'material')} />
                     <Label className="form-check-label" check htmlFor="wood">Wood</Label>
                   </FormGroup>
                   <FormGroup check inline>
@@ -348,10 +378,21 @@ class Forms extends Component {
               </FormGroup>
               <FormGroup row>
                 <Col md="2">
-                  <Label htmlFor="file-multiple-input">Upload Pictures</Label>
+                  <Label htmlFor="file-multiple-input">Upload Picture</Label>
                 </Col>
                 <Col xs="12" md="9">
-                  <Input type="file" id="file-multiple-input" name="file-multiple-input" multiple />
+                  {this.state.isUploading && <p>Progress: {this.state.progress}</p>}
+                  {this.state.image && <img src={this.state.image} border="3" height="100" width="100" />}
+                  <FileUploader
+                    accept="image/*"
+                    name="avatar"
+                    randomizeFilename
+                    storageRef={firebase.storage().ref("images")}
+                    onUploadStart={this.handleUploadStart}
+                    onUploadError={this.handleUploadError}
+                    onUploadSuccess={this.handleUploadSuccess}
+                    onProgress={this.handleProgress}
+                  />
                 </Col>
               </FormGroup>
               <FormGroup row>
