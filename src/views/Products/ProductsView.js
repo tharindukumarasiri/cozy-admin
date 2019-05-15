@@ -48,12 +48,13 @@ export class ProductsView extends Component {
             <Table responsive>
               <thead>
                 <tr>
+                  <th>image</th>
                   <th>code</th>
                   <th>name</th>
                   <th>category</th>
                   <th>material</th>
                   <th>description</th>
-                  <th>price</th>
+                  <th>price (Rs.)</th>
                   <th>stock</th>
                 </tr>
               </thead>
@@ -61,6 +62,7 @@ export class ProductsView extends Component {
               {this.props.products.map(product => (
                 <tbody>
                   <tr key={product.id}>
+                    <img src={product.image} border="3" height="100" width="100"></img>
                     <td>{product.code}</td>
                     <td>{product.name}</td>
                     <td>{product.category}</td>
@@ -72,6 +74,7 @@ export class ProductsView extends Component {
                 </tbody>
               ))}
             </Table>
+
           </CardBody>
         </Card>
       </section>
