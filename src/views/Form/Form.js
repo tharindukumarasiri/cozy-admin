@@ -42,7 +42,7 @@ class Forms extends Component {
   //     note: ''
   //   }
 
-  //   this.createNote = this.createNote.bind(this);
+  //   this.createProduct = this.createNote.bind(this);
   // }
 
   // onChangeHandler (evt, key) {
@@ -114,7 +114,7 @@ class Forms extends Component {
       timModel: false
     }
 
-    this.createNote = this.createNote.bind(this);
+    this.createProduct = this.createProduct.bind(this);
     this.toggleSubmit = this.toggleSubmit.bind(this);
     this.toggleCat = this.toggleCat.bind(this);
     this.toggleTim = this.toggleTim.bind(this);
@@ -127,7 +127,7 @@ class Forms extends Component {
     });
   }
 
-  createNote() {
+  createProduct() {
     if (this.state.code !== '' && this.state.name !== '') {
       firebase.database().ref('products').push({
         code: this.state.code,
@@ -310,7 +310,7 @@ class Forms extends Component {
                       <FileUploader></FileUploader>
                     </ModalBody>
                     <ModalFooter>
-                      <Button color="primary" type="reset" onClick={this.createNote}>Add</Button>{' '}
+                      <Button color="primary" type="reset" onClick={this.createProduct}>Add</Button>{' '}
                       <Button color="secondary" onClick={this.toggleCat}>Cancel</Button>
                     </ModalFooter>
                   </Modal>
@@ -492,7 +492,7 @@ class Forms extends Component {
                 isOpen={this.state.submit} toggle={this.toggleSubmit} >
                 <ModalHeader toggle={this.toggleSubmit}>Are you Sure!</ModalHeader>
                 <ModalFooter>
-                  <Button color="success" form="myform" type="reset" onClick={this.createNote}>Save</Button>{' '}
+                  <Button color="success" form="myform" type="reset" onClick={this.createProduct}>Save</Button>{' '}
                   <Button color="secondary" onClick={this.toggleSubmit}>Cancel</Button>
                 </ModalFooter>
               </Modal>
