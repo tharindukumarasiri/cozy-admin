@@ -3,6 +3,8 @@ import ProductList from './ProductList'
 import { connect } from 'react-redux'
 import { firestoreConnect } from 'react-redux-firebase'
 import { compose } from 'redux'
+import * as firebase from 'firebase';
+import ProductsView from './ProductsView';
 import {
   Badge,
   Card,
@@ -17,20 +19,96 @@ import {
 } from "reactstrap";
 
 class Products extends Component {
+
+  constructor() {
+    super();
+
+    this.state = {
+      products: []
+    }
+  }
+
+  componentDidMount() {
+    this.db = firebase.database();
+
+    this.listenForChange();
+  }
+
+  listenForChange() {
+    this.db.ref('products').on('child_added', snapshot => {
+      let product = {
+        id: snapshot.key,
+        image: snapshot.val().image,
+        code: snapshot.val().code,
+        name: snapshot.val().name,
+        material: snapshot.val().material,
+        stock: snapshot.val().stock,
+        price: snapshot.val().price,
+        description: snapshot.val().description,
+        category: snapshot.val().category,
+      }
+
+      let products = this.state.products;
+      products.push(product);
+
+      this.setState({
+        products: products
+      });
+      console.log(products);
+      
+    });
+
+  }
+
   render() {
     // console.log(this.props);
-    const { products } = this.props;
+    // const { products } = this.props;
     return (
       <div className="animated fadeIn">
+
+
+        {/* <h3>Notes</h3> */}
+        {/* <div className="products" > */}
+          {/* {this.state.products.map(product => (
+            <div className="product" key={product.id}>
+              <div className="product-category">
+                <h3>{product.category}</h3>
+                
+              </div>
+              <div className="product-code" >
+                <p>{product.code}</p>
+              </div>
+            </div>
+          ))} */}
+          {/* <ul>
+            {this.state.products.map(item => {
+              return <li>{item[0]}</li>;
+            })}
+          </ul> */}
+
+          {/* {products} */}
+        {/* </div> */}
+
+        <ProductsView products={this.state.products} />
+
+
+
+
+
+
+
+
+
+
         {/* <Card> */}
         {/* <Row> */}
-          {/* <Col xs="12" sm="6" md="4"> */}
-          <section>
+        {/* <Col xs="12" sm="6" md="4"> */}
+        {/* <section> */}
           {/* <Card> */}
-            <ProductList products={products} />
-            </section>
-          {/* </Card> */}
-          {/* </Col> */}
+          {/* <ProductList products={products} /> */}
+        {/* </section> */}
+        {/* </Card> */}
+        {/* </Col> */}
         {/* </Row> */}
         {/* </Card> */}
         {/* <Card>
@@ -139,18 +217,20 @@ class Products extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  console.log(state);
-  return {
-    products: state.firestore.ordered.products
-  }
-}
+// const mapStateToProps = (state) => {
+//   console.log(state);
+//   return {
+//     products: state.firestore.ordered.products
+//   }
+// }
 
-export default compose(
-  connect(mapStateToProps),
-  firestoreConnect([
-    { collection: 'products' }
-  ])
-)(Products);
+// export default compose(
+//   connect(mapStateToProps),
+//   firestoreConnect([
+//     { collection: 'products' }
+//   ])
+// )(Products);
 
 // export default connect(mapStateToProps)(Products);
+
+export default Products;

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { createProduct } from '../../store/actions/productActions'
-
+import * as firebase from 'firebase';
+import FileUploader from "react-firebase-file-uploader";
 import {
   Badge,
   Button,
@@ -34,69 +35,228 @@ import {
 
 class Forms extends Component {
 
-  state = {
-    code: '',
-    name: '',
-    price: '',
-    material: '',
-    description: '',
-    category: ''
-  }
-  handleChange = (e) => {
-    this.setState({
-      [e.target.id]: e.target.value
-    })
-  }
-  handleSubmit = (e) => {
-    e.preventDefault();
-    // console.log(this.state);
-    this.props.createProduct(this.state);
-    document.getElementById("myform").reset();
-  }
-  handleOptionChange = changeEvent => {
-    this.setState({
-      material: changeEvent.target.value
-    });
-  }
-  handleStockChange = changeEvent => {
-    this.setState({
-      stock: changeEvent.target.value
-    });
-  }
+  // constructor () {
+  //   super();
+  //   this.state = {
+  //     title: '',
+  //     note: ''
+  //   }
+
+  //   this.createNote = this.createNote.bind(this);
+  // }
+
+  // onChangeHandler (evt, key) {
+  //   this.setState({
+  //     [key]: evt.target.value
+  //   });
+  // }
+
+  // createNote () {
+  //   if (this.state.title !== '' && this.state.note !== '') {
+  //     firebase.database().ref('notes').push({
+  //       title: this.state.title,
+  //       note: this.state.note
+  //     })
+  //   }
+  // }
+
+  //   render() {
+  //     return (
+  //       <div>
+  //         <h3>Create New Note</h3>
+  //         <div className="form-group">
+  //           <label htmlFor="noteform-title">Title</label>
+  //           <input type="text" id="noteform-title" name="noteform-title" value={this.state.title} onChange={(evt) => this.onChangeHandler(evt, 'title')} />
+  //         </div>
+  //         <div className="form-group">
+  //           <label htmlFor="noteform-note">Note</label>
+  //           <textarea name="noteform-note" id="noteform-note" value={this.state.note} onChange={(evt) => this.onChangeHandler(evt, 'note')}></textarea>
+  //         </div>
+  //         <button onClick={this.createNote}>Create Note</button>
+  //       </div>
+  //     )
+  //   }
+  // }
+
+  // export default Forms;
+
+
+
+
+
+
+
+
 
   constructor(props) {
     super(props);
     this.state = {
-      modal: false,
-      large: false,
-      info: false,
-    };
+      code: '',
+      name: '',
+      material: '',
+      stock: '',
+      price: '',
+      description: '',
+      category: '',
 
-    this.toggle = this.toggle.bind(this);
-    this.toggleInfo = this.toggleInfo.bind(this);
-    this.toggleLarge = this.toggleLarge.bind(this);
-  }
-  toggle() {
-    this.setState({
-      modal: !this.state.modal,
+      avatar: "",
+      isUploading: false,
+      progress: 0,
+      image: "",
 
-    });
+      isUploadingItem: false,
+      progressItem: 0,
+      item: "",
+
+      submit: false,
+      catModel: false,
+      colModel: false,
+      timModel: false
+    }
+
+    this.createNote = this.createNote.bind(this);
+    this.toggleSubmit = this.toggleSubmit.bind(this);
+    this.toggleCat = this.toggleCat.bind(this);
+    this.toggleTim = this.toggleTim.bind(this);
+    this.toggleCol = this.toggleCol.bind(this);
   }
-  toggleLarge() {
+
+  onChangeHandler(evt, key) {
     this.setState({
-      large: !this.state.large,
+      [key]: evt.target.value
     });
   }
-  toggleInfo() {
+
+  createNote() {
+    if (this.state.code !== '' && this.state.name !== '') {
+      firebase.database().ref('products').push({
+        code: this.state.code,
+        name: this.state.name,
+        material: this.state.material,
+        stock: this.state.stock,
+        price: this.state.price,
+        description: this.state.description,
+        category: this.state.category,
+        image: this.state.image,
+        model: this.state.item
+      })
+      this.toggleSubmit();
+      this.setState({ image: "" });
+    }
+  }
+
+
+  //Uploading Image
+  handleUploadStart = () => this.setState({ isUploading: true, progress: 0 });
+  handleProgress = progress => this.setState({ progress });
+  handleUploadError = error => {
+    this.setState({ isUploading: false });
+    console.error(error);
+  };
+  handleUploadSuccess = filename => {
+    this.setState({ avatar: filename, progress: 100, isUploading: false });
+    firebase
+      .storage()
+      .ref("images")
+      .child(filename)
+      .getDownloadURL()
+      .then(url => this.setState({ image: url }));
+  };
+
+  //uploading 3D Model item
+  handleUploadStartItem = () => this.setState({ isUploadingItem: true, progressItem: 0 });
+  handleProgressItem = progressItem => this.setState({ progressItem });
+  handleUploadErrorItem = error => {
+    this.setState({ isUploadingItem: false });
+    console.error(error);
+  };
+  handleUploadSuccessItem = filename => {
+    this.setState({ avatar: filename, progress: 100, isUploadingItem: false });
+    firebase
+      .storage()
+      .ref("models")
+      .child(filename)
+      .getDownloadURL()
+      .then(url => this.setState({ item: url }))
+  };
+
+  //handling popup models
+  toggleSubmit() {
     this.setState({
-      info: !this.state.info,
+      submit: !this.state.submit,
     });
   }
+  toggleCat() {
+    this.setState({
+      catModel: !this.state.catModel,
+    });
+  }
+  toggleTim() {
+    this.setState({
+      timModel: !this.state.timModel,
+    });
+  }
+  toggleCol() {
+    this.setState({
+      colModel: !this.state.colModel,
+    });
+  }
+
+  // handleChange = (e) => {
+  //   this.setState({
+  //     [e.target.id]: e.target.value
+  //   })
+  // }
+  // handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   // console.log(this.state);
+  //   this.props.createProduct(this.state);
+  //   document.getElementById("myform").reset();
+  // }
+  // handleOptionChange = changeEvent => {
+  //   this.setState({
+  //     material: changeEvent.target.value
+  //   });
+  // }
+  // handleStockChange = changeEvent => {
+  //   this.setState({
+  //     stock: changeEvent.target.value
+  //   });
+  // }
+
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //     modal: false,
+  //     large: false,
+  //     info: false,
+  //   };
+
+  //   this.toggle = this.toggle.bind(this);
+  //   this.toggleInfo = this.toggleInfo.bind(this);
+  //   this.toggleLarge = this.toggleLarge.bind(this);
+  // }
+  // toggle() {
+  //   this.setState({
+  //     modal: !this.state.modal,
+
+  //   });
+  // }
+  // toggleLarge() {
+  //   this.setState({
+  //     large: !this.state.large,
+  //   });
+  // }
+  // toggleInfo() {
+  //   this.setState({
+  //     info: !this.state.info,
+  //   });
+  // }
 
   render() {
     return (
       <div className="animated fadeIn">
-        <Form id="myform" action="" method="post" encType="multipart/form-data" className="form-horizontal" onSubmit={this.handleSubmit}>
+        <Form id="myform" action="" encType="multipart/form-data" className="form-horizontal" >
           <Card>
             <CardHeader>
               <strong>Insert Furniture Details</strong>
@@ -107,7 +267,7 @@ class Forms extends Component {
                   <Label htmlFor="text-input">Product Code</Label>
                 </Col>
                 <Col xs="12" md="9">
-                  <Input type="text" id="code" placeholder="Product Code" onChange={this.handleChange} />
+                  <Input type="text" id="code" placeholder="Product Code" onChange={(evt) => this.onChangeHandler(evt, 'code')} />
                   <FormText color="muted">Please enter the unique code in catalogue</FormText>
                 </Col>
               </FormGroup>
@@ -116,7 +276,7 @@ class Forms extends Component {
                   <Label htmlFor="text-input">Product Name</Label>
                 </Col>
                 <Col xs="12" md="9">
-                  <Input type="text" id="name" placeholder="Product Name" onChange={this.handleChange} />
+                  <Input type="text" id="name" placeholder="Product Name" onChange={(evt) => this.onChangeHandler(evt, 'name')} />
                   <FormText color="muted">Name as in the catalogue</FormText>
                 </Col>
               </FormGroup>
@@ -124,15 +284,36 @@ class Forms extends Component {
                 <Col md="2">
                   <Label htmlFor="select">Category</Label>
                 </Col>
-                <Col xs="12" md="9">
-                  <Input type="select" id="category" onChange={this.handleChange}>
+                <Col xs="12" md="7">
+                  <Input type="select" id="category" onChange={(evt) => this.onChangeHandler(evt, 'category')}>
                     <option value="0">Please select</option>
-                    <option value="Living">Living</option>
-                    <option value="Dining">Dining</option>
-                    <option value="Bedroom">Bedroom</option>
-                    <option value="Patio">Patio Furniture</option>
-                    <option value="Other">Other</option>
+                    <option value="cat1">cat1</option>
+                    <option value="cat2">cat2</option>
+                    <option value="cat3">cat3</option>
+                    <option value="cat4">cat4</option>
+                    <option value="cat5">cat5</option>
                   </Input>
+                </Col>
+                <Col xs="6" md="2">
+                  <Button block onClick={this.toggleCat} color="secondary" className="mr-1"> Edit </Button>
+                  <Modal
+                    {...this.props}
+                    size="lg"
+                    aria-labelledby="contained-modal-title-vcenter"
+                    centered
+                    isOpen={this.state.catModel} toggle={this.toggleCat} >
+                    <ModalHeader toggle={this.toggleCat}>Add New Category</ModalHeader>
+                    <ModalBody>
+                      <Label htmlFor="text-input">Category Name</Label>
+                      <Input type="text" id="" />
+                      <Label htmlFor="text-input">Upload Category Image</Label> <br></br>
+                      <FileUploader></FileUploader>
+                    </ModalBody>
+                    <ModalFooter>
+                      <Button color="primary" type="reset" onClick={this.createNote}>Add</Button>{' '}
+                      <Button color="secondary" onClick={this.toggleCat}>Cancel</Button>
+                    </ModalFooter>
+                  </Modal>
                 </Col>
               </FormGroup>
               <FormGroup row>
@@ -141,19 +322,19 @@ class Forms extends Component {
                 </Col>
                 <Col md="9">
                   <FormGroup check inline>
-                    <Input className="form-check-input" type="radio" id="wood" name="material" value="Wood" checked={this.state.material === 'Wood'} onChange={this.handleOptionChange} />
+                    <Input className="form-check-input" type="radio" id="wood" name="material" value="Wood" checked={this.state.material === 'Wood'} onChange={(evt) => this.onChangeHandler(evt, 'material')} />
                     <Label className="form-check-label" check htmlFor="wood">Wood</Label>
                   </FormGroup>
                   <FormGroup check inline>
-                    <Input className="form-check-input" type="radio" id="plastic" name="material" value="Plastic" checked={this.state.material === 'Plastic'} onChange={this.handleOptionChange} />
+                    <Input className="form-check-input" type="radio" id="plastic" name="material" value="Plastic" checked={this.state.material === 'Plastic'} onChange={(evt) => this.onChangeHandler(evt, 'material')} />
                     <Label className="form-check-label" check htmlFor="plastic">Plastic</Label>
                   </FormGroup>
                   <FormGroup check inline>
-                    <Input className="form-check-input" type="radio" id="metal" name="material" value="Metal" checked={this.state.material === 'Metal'} onChange={this.handleOptionChange} />
+                    <Input className="form-check-input" type="radio" id="metal" name="material" value="Metal" checked={this.state.material === 'Metal'} onChange={(evt) => this.onChangeHandler(evt, 'material')} />
                     <Label className="form-check-label" check htmlFor="metal">Metal</Label>
                   </FormGroup>
                   <FormGroup check inline>
-                    <Input className="form-check-input" type="radio" id="other" name="material" value="Other" checked={this.state.material === 'Other'} onChange={this.handleOptionChange} />
+                    <Input className="form-check-input" type="radio" id="other" name="material" value="Other" checked={this.state.material === 'Other'} onChange={(evt) => this.onChangeHandler(evt, 'material')} />
                     <Label className="form-check-label" check htmlFor="other">Other</Label>
                   </FormGroup>
                 </Col>
@@ -171,19 +352,21 @@ class Forms extends Component {
                   </Input>
                 </Col>
                 <Col xs="6" md="2">
-                  <Button block color="secondary" onClick={this.toggleLarge} className="mr-1"> Edit </Button>
-                  <Modal isOpen={this.state.large} toggle={this.toggleLarge} className={'modal-lg ' + this.props.className}>
-                    <ModalHeader toggle={this.toggleLarge}>Edit Timber Types</ModalHeader>
+                  <Button block onClick={this.toggleTim} color="secondary" className="mr-1"> Edit </Button>
+                  <Modal
+                    {...this.props}
+                    size="lg"
+                    aria-labelledby="contained-modal-title-vcenter"
+                    centered
+                    isOpen={this.state.timModel} toggle={this.toggleTim} >
+                    <ModalHeader toggle={this.toggleTim}>Add New Wood Type</ModalHeader>
                     <ModalBody>
-                      <Input type="text" placeholder="Timber" /><br></br>
-                      Mahogany <br></br>
-                      Teak<br></br>
-                      Mara<br></br>
+                      <Label htmlFor="text-input">Timber Name</Label>
+                      <Input type="text" id="" />
                     </ModalBody>
                     <ModalFooter>
-                      <Button color="primary" >Add</Button>
-                      <Button color="success" onClick={this.toggleLarge}>Save</Button>{' '}
-                      <Button color="secondary" onClick={this.toggleLarge}>Cancel</Button>
+                      <Button color="primary" type="reset" >Add</Button>{' '}
+                      <Button color="secondary" onClick={this.toggleTim}>Cancel</Button>
                     </ModalFooter>
                   </Modal>
                 </Col>
@@ -204,22 +387,21 @@ class Forms extends Component {
                   </Input>
                 </Col>
                 <Col xs="6" md="2">
-                  <Button block color="secondary" onClick={this.toggle} className="mr-1"> Edit </Button>
-                  <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
-                    <ModalHeader toggle={this.toggle}>Edit Colours</ModalHeader>
+                  <Button block onClick={this.toggleCol} color="secondary" className="mr-1"> Edit </Button>
+                  <Modal
+                    {...this.props}
+                    size="lg"
+                    aria-labelledby="contained-modal-title-vcenter"
+                    centered
+                    isOpen={this.state.colModel} toggle={this.toggleCol} >
+                    <ModalHeader toggle={this.toggleCol}>Add New Colour</ModalHeader>
                     <ModalBody>
-                      <Input type="text" placeholder="Colour" /><br></br>
-                      Mahogany <br></br>
-                      Teak<br></br>
-                      Mara<br></br>
-                      Black<br></br>
-                      White<br></br>
-                      Red<br></br>
+                      <Label htmlFor="text-input">Colour</Label>
+                      <Input type="text" id="" />
                     </ModalBody>
                     <ModalFooter>
-                      <Button color="primary" >Add</Button>
-                      <Button color="success" onClick={this.toggle}>Save</Button>{' '}
-                      <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+                      <Button color="primary" type="reset" >Add</Button>{' '}
+                      <Button color="secondary" onClick={this.toggleCol}>Cancel</Button>
                     </ModalFooter>
                   </Modal>
                 </Col>
@@ -229,7 +411,7 @@ class Forms extends Component {
                   <Label htmlFor="textarea-input">Description</Label>
                 </Col>
                 <Col xs="12" md="9">
-                  <Input type="textarea" id="description" rows="6" placeholder="Please add a short description" onChange={this.handleChange} />
+                  <Input type="textarea" id="description" rows="6" placeholder="Please add a short description" onChange={(evt) => this.onChangeHandler(evt, 'description')} />
                 </Col>
               </FormGroup>
               <FormGroup row>
@@ -242,7 +424,7 @@ class Forms extends Component {
                       <InputGroupAddon addonType="prepend">
                         <InputGroupText>Rs.</InputGroupText>
                       </InputGroupAddon>
-                      <Input id="price" size="16" type="text" onChange={this.handleChange} />
+                      <Input id="price" size="16" type="text" onChange={(evt) => this.onChangeHandler(evt, 'price')} />
                     </InputGroup>
                   </div>
                 </Col>
@@ -253,21 +435,32 @@ class Forms extends Component {
                 </Col>
                 <Col md="9">
                   <FormGroup check inline>
-                    <Input className="form-check-input" type="radio" id="available" name="stocks" value="Available" checked={this.state.stock === 'Available'} onChange={this.handleStockChange} />
+                    <Input className="form-check-input" type="radio" id="available" name="stocks" value="Available" checked={this.state.stock === 'Available'} onChange={(evt) => this.onChangeHandler(evt, 'stock')} />
                     <Label className="form-check-label" check htmlFor="available">Available</Label>
                   </FormGroup>
                   <FormGroup check inline>
-                    <Input className="form-check-input" type="radio" id="notavailable" name="stocks" value="Not Available" checked={this.state.stock === 'Not Available'} onChange={this.handleStockChange} />
+                    <Input className="form-check-input" type="radio" id="notavailable" name="stocks" value="Not Available" checked={this.state.stock === 'Not Available'} onChange={(evt) => this.onChangeHandler(evt, 'stock')} />
                     <Label className="form-check-label" check htmlFor="notavailable">Out of Stock</Label>
                   </FormGroup>
                 </Col>
               </FormGroup>
               <FormGroup row>
                 <Col md="2">
-                  <Label htmlFor="file-multiple-input">Upload Pictures</Label>
+                  <Label htmlFor="file-multiple-input">Upload Picture</Label>
                 </Col>
                 <Col xs="12" md="9">
-                  <Input type="file" id="file-multiple-input" name="file-multiple-input" multiple />
+                  {this.state.isUploading && <p>Progress: {this.state.progress}</p>}
+                  {this.state.image && <img src={this.state.image} border="3" height="100" width="100" />}
+                  <FileUploader
+                    accept="image/*"
+                    name="avatar"
+                    randomizeFilename
+                    storageRef={firebase.storage().ref("images")}
+                    onUploadStart={this.handleUploadStart}
+                    onUploadError={this.handleUploadError}
+                    onUploadSuccess={this.handleUploadSuccess}
+                    onProgress={this.handleProgress}
+                  />
                 </Col>
               </FormGroup>
               <FormGroup row>
@@ -275,21 +468,32 @@ class Forms extends Component {
                   <Label htmlFor="file-multiple-input">Upload 3D Model</Label>
                 </Col>
                 <Col xs="12" md="9">
-                  <Input type="file" id="file-multiple-input" name="file-multiple-input" />
+                  {this.state.isUploadingItem && <p>Progress: {this.state.progressItem}</p>}
+                  <FileUploader
+                    accept="image/*"
+                    name="avatar"
+                    randomizeFilename
+                    storageRef={firebase.storage().ref("models")}
+                    onUploadStartItem={this.handleUploadStartItem}
+                    onUploadErrorItem={this.handleUploadErrorItem}
+                    onUploadSuccessItem={this.handleUploadSuccessItem}
+                    onProgressItem={this.handleProgressItem}
+                  />
                 </Col>
               </FormGroup>
             </CardBody>
             <CardFooter>
-              <Button size="sm" color="primary" onClick={this.toggleInfo} className="mr-2" >Submit</Button>
-              <Modal isOpen={this.state.info} toggle={this.toggleInfo} className={'modal-info ' + this.props.className}>
-                <ModalHeader toggle={this.toggleInfo}>Are You Sure You Want To Save</ModalHeader>
+              <Button size="sm" onClick={this.toggleSubmit} color="primary" className="mr-2" >Submit</Button>
+              <Modal
+                {...this.props}
+                size="sm"
+                aria-labelledby="contained-modal-title-vcenter"
+                centered
+                isOpen={this.state.submit} toggle={this.toggleSubmit} >
+                <ModalHeader toggle={this.toggleSubmit}>Are you Sure!</ModalHeader>
                 <ModalFooter>
-                  <Col md="2">
-                    <Button type="submit" form="myform" color="success" onClick={this.toggleInfo}>Yes</Button>{' '}
-                  </Col>
-                  <Col md="6">
-                    <Button color="danger" onClick={this.toggleInfo}>Cancel</Button>
-                  </Col>
+                  <Button color="success" form="myform" type="reset" onClick={this.createNote}>Save</Button>{' '}
+                  <Button color="secondary" onClick={this.toggleSubmit}>Cancel</Button>
                 </ModalFooter>
               </Modal>
               <Button type="reset" size="sm" color="danger"> Cancel</Button>
@@ -302,10 +506,10 @@ class Forms extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch => {
-  return {
-    createProduct: (product) => dispatch(createProduct(product))
-  }
-}
+// const mapDispatchToProps = dispatch => {
+//   return {
+//     createProduct: (product) => dispatch(createProduct(product))
+//   }
+// }
 
-export default connect(null, mapDispatchToProps)(Forms);
+export default Forms;
