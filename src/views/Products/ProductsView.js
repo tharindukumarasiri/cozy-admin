@@ -48,14 +48,15 @@ export class ProductsView extends Component {
             <Table responsive>
               <thead>
                 <tr>
-                  <th>image</th>
-                  <th>code</th>
-                  <th>name</th>
-                  <th>category</th>
-                  <th>material</th>
-                  <th>description</th>
-                  <th>price (Rs.)</th>
-                  <th>stock</th>
+                  <th>Image</th>
+                  <th>Code</th>
+                  <th>Name</th>
+                  <th>Category</th>
+                  <th>Material</th>
+                  <th>Description</th>
+                  <th>Price (Rs.)</th>
+                  <th>Stock</th>
+                  <th>Options</th>
                 </tr>
               </thead>
 
@@ -70,6 +71,10 @@ export class ProductsView extends Component {
                     <td>{product.description}</td>
                     <td>{product.price}</td>
                     <td>{product.stock}</td>
+                    <td>
+                      <Button color="ghost-success"><i className="icon-pencil"></i></Button>
+                      <Button color="ghost-danger"><i className="icon-close"></i></Button>
+                    </td>
                   </tr>
                 </tbody>
               ))}
