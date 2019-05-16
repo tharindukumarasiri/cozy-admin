@@ -88,8 +88,8 @@ class Forms extends Component {
 
 
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       code: '',
       name: '',
@@ -106,12 +106,15 @@ class Forms extends Component {
 
       isUploadingItem: false,
       progressItem: 0,
-      Item: ""
+      item: "",
+
+      submit: false
 
     }
 
     this.createNote = this.createNote.bind(this);
 
+    this.toggleSubmit = this.toggleSubmit.bind(this);
   }
 
   onChangeHandler(evt, key) {
@@ -131,8 +134,9 @@ class Forms extends Component {
         description: this.state.description,
         category: this.state.category,
         image: this.state.image,
-        model: this.state.Item
+        model: this.state.item
       })
+      this.toggleSubmit();
       this.setState({ image: "" });
     }
   }
@@ -155,7 +159,7 @@ class Forms extends Component {
       .then(url => this.setState({ image: url }));
   };
 
-  //uploading Model item
+  //uploading 3D Model item
   handleUploadStartItem = () => this.setState({ isUploadingItem: true, progressItem: 0 });
   handleProgressItem = progressItem => this.setState({ progressItem });
   handleUploadErrorItem = error => {
@@ -163,15 +167,21 @@ class Forms extends Component {
     console.error(error);
   };
   handleUploadSuccessItem = filename => {
-    this.setState({ progress: 100, isUploadingItem: false });
+    this.setState({ avatar: filename, progress: 100, isUploadingItem: false });
     firebase
       .storage()
       .ref("models")
       .child(filename)
       .getDownloadURL()
-      .then(url => this.setState({ Item: url }))
+      .then(url => this.setState({ item: url }))
   };
 
+  //handling popup models
+  toggleSubmit() {
+    this.setState({
+      submit: !this.state.submit,
+    });
+  }
   // handleChange = (e) => {
   //   this.setState({
   //     [e.target.id]: e.target.value
@@ -399,20 +409,16 @@ class Forms extends Component {
                 <Col xs="12" md="9">
                   {this.state.isUploading && <p>Progress: {this.state.progress}</p>}
                   {this.state.image && <img src={this.state.image} border="3" height="100" width="100" />}
-                  {/* <label style={{ backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, pointer: 'cursor' }}>
-                    Select your Image */}
                   <FileUploader
-                      // hidden
-                      accept="image/*"
-                      name="avatar"
-                      randomizeFilename
-                      storageRef={firebase.storage().ref("images")}
-                      onUploadStart={this.handleUploadStart}
-                      onUploadError={this.handleUploadError}
-                      onUploadSuccess={this.handleUploadSuccess}
-                      onProgress={this.handleProgress}
-                    />
-                  {/* </label> */}
+                    accept="image/*"
+                    name="avatar"
+                    randomizeFilename
+                    storageRef={firebase.storage().ref("images")}
+                    onUploadStart={this.handleUploadStart}
+                    onUploadError={this.handleUploadError}
+                    onUploadSuccess={this.handleUploadSuccess}
+                    onProgress={this.handleProgress}
+                  />
                 </Col>
               </FormGroup>
               <FormGroup row>
@@ -421,33 +427,31 @@ class Forms extends Component {
                 </Col>
                 <Col xs="12" md="9">
                   {this.state.isUploadingItem && <p>Progress: {this.state.progressItem}</p>}
-                  {/* <label style={{ backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, pointer: 'cursor' }}>
-                    Choose your File */}
                   <FileUploader
-                      // hidden
-                      accept="image/*"
-                      randomizeFilename
-                      storageRef={firebase.storage().ref("models")}
-                      onUploadStartItem={this.handleUploadStartItem}
-                      onUploadErrorItem={this.handleUploadErrorItem}
-                      onUploadSuccessItem={this.handleUploadSuccessItem}
-                      onProgressItem={this.handleProgressItem}
-                    />
-                  {/* </label> */}
+                    accept="image/*"
+                    name="avatar"
+                    randomizeFilename
+                    storageRef={firebase.storage().ref("models")}
+                    onUploadStartItem={this.handleUploadStartItem}
+                    onUploadErrorItem={this.handleUploadErrorItem}
+                    onUploadSuccessItem={this.handleUploadSuccessItem}
+                    onProgressItem={this.handleProgressItem}
+                  />
                 </Col>
               </FormGroup>
             </CardBody>
             <CardFooter>
-              <Button size="sm" type="reset" onClick={this.createNote} color="primary" className="mr-2" >Submit</Button>
-              <Modal isOpen={this.state.info} toggle={this.toggleInfo} className={'modal-info ' + this.props.className}>
-                <ModalHeader toggle={this.toggleInfo}>Are You Sure You Want To Save</ModalHeader>
+              <Button size="sm" onClick={this.toggleSubmit} color="primary" className="mr-2" >Submit</Button>
+              <Modal 
+                {...this.props}
+                size="sm"
+                aria-labelledby="contained-modal-title-vcenter"
+                centered 
+                isOpen={this.state.submit} toggle={this.toggleSubmit} >
+                <ModalHeader toggle={this.toggleSubmit}>Are you Sure!</ModalHeader>
                 <ModalFooter>
-                  <Col md="2">
-                    <Button type="submit" form="myform" color="success" onClick={this.toggleInfo}>Yes</Button>{' '}
-                  </Col>
-                  <Col md="6">
-                    <Button color="danger" onClick={this.toggleInfo}>Cancel</Button>
-                  </Col>
+                  <Button color="success" form="myform" type="reset" onClick={this.createNote}>Save</Button>{' '}
+                  <Button color="secondary" onClick={this.toggleSubmit}>Cancel</Button>
                 </ModalFooter>
               </Modal>
               <Button type="reset" size="sm" color="danger"> Cancel</Button>
