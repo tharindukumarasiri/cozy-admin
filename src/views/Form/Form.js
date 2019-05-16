@@ -108,13 +108,17 @@ class Forms extends Component {
       progressItem: 0,
       item: "",
 
-      submit: false
-
+      submit: false,
+      catModel: false,
+      colModel: false,
+      timModel: false
     }
 
     this.createNote = this.createNote.bind(this);
-
     this.toggleSubmit = this.toggleSubmit.bind(this);
+    this.toggleCat = this.toggleCat.bind(this);
+    this.toggleTim = this.toggleTim.bind(this);
+    this.toggleCol = this.toggleCol.bind(this);
   }
 
   onChangeHandler(evt, key) {
@@ -182,6 +186,22 @@ class Forms extends Component {
       submit: !this.state.submit,
     });
   }
+  toggleCat() {
+    this.setState({
+      catModel: !this.state.catModel,
+    });
+  }
+  toggleTim() {
+    this.setState({
+      timModel: !this.state.timModel,
+    });
+  }
+  toggleCol() {
+    this.setState({
+      colModel: !this.state.colModel,
+    });
+  }
+
   // handleChange = (e) => {
   //   this.setState({
   //     [e.target.id]: e.target.value
@@ -264,7 +284,7 @@ class Forms extends Component {
                 <Col md="2">
                   <Label htmlFor="select">Category</Label>
                 </Col>
-                <Col xs="12" md="9">
+                <Col xs="12" md="7">
                   <Input type="select" id="category" onChange={(evt) => this.onChangeHandler(evt, 'category')}>
                     <option value="0">Please select</option>
                     <option value="cat1">cat1</option>
@@ -273,6 +293,27 @@ class Forms extends Component {
                     <option value="cat4">cat4</option>
                     <option value="cat5">cat5</option>
                   </Input>
+                </Col>
+                <Col xs="6" md="2">
+                  <Button block onClick={this.toggleCat} color="secondary" className="mr-1"> Edit </Button>
+                  <Modal
+                    {...this.props}
+                    size="lg"
+                    aria-labelledby="contained-modal-title-vcenter"
+                    centered
+                    isOpen={this.state.catModel} toggle={this.toggleCat} >
+                    <ModalHeader toggle={this.toggleCat}>Add New Category</ModalHeader>
+                    <ModalBody>
+                      <Label htmlFor="text-input">Category Name</Label>
+                      <Input type="text" id="" />
+                      <Label htmlFor="text-input">Upload Category Image</Label> <br></br>
+                      <FileUploader></FileUploader>
+                    </ModalBody>
+                    <ModalFooter>
+                      <Button color="primary" type="reset" onClick={this.createNote}>Add</Button>{' '}
+                      <Button color="secondary" onClick={this.toggleCat}>Cancel</Button>
+                    </ModalFooter>
+                  </Modal>
                 </Col>
               </FormGroup>
               <FormGroup row>
@@ -311,19 +352,21 @@ class Forms extends Component {
                   </Input>
                 </Col>
                 <Col xs="6" md="2">
-                  <Button block color="secondary" className="mr-1"> Edit </Button>
-                  <Modal isOpen={this.state.large} toggle={this.toggleLarge} className={'modal-lg ' + this.props.className}>
-                    <ModalHeader toggle={this.toggleLarge}>Edit Timber Types</ModalHeader>
+                  <Button block onClick={this.toggleTim} color="secondary" className="mr-1"> Edit </Button>
+                  <Modal
+                    {...this.props}
+                    size="lg"
+                    aria-labelledby="contained-modal-title-vcenter"
+                    centered
+                    isOpen={this.state.timModel} toggle={this.toggleTim} >
+                    <ModalHeader toggle={this.toggleTim}>Add New Wood Type</ModalHeader>
                     <ModalBody>
-                      <Input type="text" placeholder="Timber" /><br></br>
-                      Mahogany <br></br>
-                      Teak<br></br>
-                      Mara<br></br>
+                      <Label htmlFor="text-input">Timber Name</Label>
+                      <Input type="text" id="" />
                     </ModalBody>
                     <ModalFooter>
-                      <Button color="primary" >Add</Button>
-                      <Button color="success" onClick={this.toggleLarge}>Save</Button>{' '}
-                      <Button color="secondary" onClick={this.toggleLarge}>Cancel</Button>
+                      <Button color="primary" type="reset" >Add</Button>{' '}
+                      <Button color="secondary" onClick={this.toggleTim}>Cancel</Button>
                     </ModalFooter>
                   </Modal>
                 </Col>
@@ -344,24 +387,23 @@ class Forms extends Component {
                   </Input>
                 </Col>
                 <Col xs="6" md="2">
-                  <Button block color="secondary" className="mr-1"> Edit </Button>
-                  {/* <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
-                    <ModalHeader toggle={this.toggle}>Edit Colours</ModalHeader>
+                  <Button block onClick={this.toggleCol} color="secondary" className="mr-1"> Edit </Button>
+                  <Modal
+                    {...this.props}
+                    size="lg"
+                    aria-labelledby="contained-modal-title-vcenter"
+                    centered
+                    isOpen={this.state.colModel} toggle={this.toggleCol} >
+                    <ModalHeader toggle={this.toggleCol}>Add New Colour</ModalHeader>
                     <ModalBody>
-                      <Input type="text" placeholder="Colour" /><br></br>
-                      Mahogany <br></br>
-                      Teak<br></br>
-                      Mara<br></br>
-                      Black<br></br>
-                      White<br></br>
-                      Red<br></br>
+                      <Label htmlFor="text-input">Colour</Label>
+                      <Input type="text" id="" />
                     </ModalBody>
                     <ModalFooter>
-                      <Button color="primary" >Add</Button>
-                      <Button color="success" onClick={this.toggle}>Save</Button>{' '}
-                      <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+                      <Button color="primary" type="reset" >Add</Button>{' '}
+                      <Button color="secondary" onClick={this.toggleCol}>Cancel</Button>
                     </ModalFooter>
-                  </Modal> */}
+                  </Modal>
                 </Col>
               </FormGroup>
               <FormGroup row>
@@ -442,11 +484,11 @@ class Forms extends Component {
             </CardBody>
             <CardFooter>
               <Button size="sm" onClick={this.toggleSubmit} color="primary" className="mr-2" >Submit</Button>
-              <Modal 
+              <Modal
                 {...this.props}
                 size="sm"
                 aria-labelledby="contained-modal-title-vcenter"
-                centered 
+                centered
                 isOpen={this.state.submit} toggle={this.toggleSubmit} >
                 <ModalHeader toggle={this.toggleSubmit}>Are you Sure!</ModalHeader>
                 <ModalFooter>
