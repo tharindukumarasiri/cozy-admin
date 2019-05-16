@@ -91,6 +91,7 @@ class Forms extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      //product details
       code: '',
       name: '',
       material: '',
@@ -99,6 +100,11 @@ class Forms extends Component {
       description: '',
       category: '',
 
+      //category
+      categoryName: '',
+      categoryimage: '',
+
+      //image uploads
       avatar: "",
       isUploading: false,
       progress: 0,
@@ -108,6 +114,7 @@ class Forms extends Component {
       progressItem: 0,
       item: "",
 
+      //for modules
       submit: false,
       catModel: false,
       colModel: false,
@@ -115,6 +122,7 @@ class Forms extends Component {
     }
 
     this.createProduct = this.createProduct.bind(this);
+    this.createCategory = this.createCategory.bind(this);
     this.toggleSubmit = this.toggleSubmit.bind(this);
     this.toggleCat = this.toggleCat.bind(this);
     this.toggleTim = this.toggleTim.bind(this);
@@ -145,6 +153,15 @@ class Forms extends Component {
     }
   }
 
+  createCategory() {
+    if (this.state.categoryName !== '' && this.state.categoryimage == '') {
+      firebase.database().ref('categorys').push({
+        name: this.state.categoryName,
+        image: this.state.categoryimage
+      })
+      this.toggleCat();
+    }
+  }
 
   //Uploading Image
   handleUploadStart = () => this.setState({ isUploading: true, progress: 0 });
@@ -305,12 +322,12 @@ class Forms extends Component {
                     <ModalHeader toggle={this.toggleCat}>Add New Category</ModalHeader>
                     <ModalBody>
                       <Label htmlFor="text-input">Category Name</Label>
-                      <Input type="text" id="" />
+                      <Input type="text" id="categoryName" onChange={(evt) => this.onChangeHandler(evt, 'categoryName')} />
                       <Label htmlFor="text-input">Upload Category Image</Label> <br></br>
                       <FileUploader></FileUploader>
                     </ModalBody>
                     <ModalFooter>
-                      <Button color="primary" type="reset" onClick={this.createProduct}>Add</Button>{' '}
+                      <Button color="primary" type="reset" onClick={this.createCategory}>Add</Button>{' '}
                       <Button color="secondary" onClick={this.toggleCat}>Cancel</Button>
                     </ModalFooter>
                   </Modal>
