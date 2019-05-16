@@ -399,10 +399,10 @@ class Forms extends Component {
                 <Col xs="12" md="9">
                   {this.state.isUploading && <p>Progress: {this.state.progress}</p>}
                   {this.state.image && <img src={this.state.image} border="3" height="100" width="100" />}
-                  <label style={{ backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, pointer: 'cursor' }}>
-                    Select your Image
+                  {/* <label style={{ backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, pointer: 'cursor' }}>
+                    Select your Image */}
                   <FileUploader
-                      hidden
+                      // hidden
                       accept="image/*"
                       name="avatar"
                       randomizeFilename
@@ -412,7 +412,7 @@ class Forms extends Component {
                       onUploadSuccess={this.handleUploadSuccess}
                       onProgress={this.handleProgress}
                     />
-                  </label>
+                  {/* </label> */}
                 </Col>
               </FormGroup>
               <FormGroup row>
@@ -421,10 +421,10 @@ class Forms extends Component {
                 </Col>
                 <Col xs="12" md="9">
                   {this.state.isUploadingItem && <p>Progress: {this.state.progressItem}</p>}
-                  <label style={{ backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, pointer: 'cursor' }}>
-                    Choose your File
+                  {/* <label style={{ backgroundColor: 'steelblue', color: 'white', padding: 10, borderRadius: 4, pointer: 'cursor' }}>
+                    Choose your File */}
                   <FileUploader
-                      hidden
+                      // hidden
                       accept="image/*"
                       randomizeFilename
                       storageRef={firebase.storage().ref("models")}
@@ -433,7 +433,7 @@ class Forms extends Component {
                       onUploadSuccessItem={this.handleUploadSuccessItem}
                       onProgressItem={this.handleProgressItem}
                     />
-                  </label>
+                  {/* </label> */}
                 </Col>
               </FormGroup>
             </CardBody>
