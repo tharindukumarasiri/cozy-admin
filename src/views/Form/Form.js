@@ -59,7 +59,7 @@ class Forms extends Component {
       colModel: false,
       timModel: false,
 
-      //category list opulating
+      //category list poulating
       categoryList: []
     }
 
@@ -236,15 +236,7 @@ class Forms extends Component {
                   <Label htmlFor="select">Category</Label>
                 </Col>
                 <Col xs="12" md="7">
-                  {/* <Input type="select" id="category" onChange={(evt) => this.onChangeHandler(evt, 'category')}>
-                    <option value="0">Please select</option> */}
-                    {/* <option value="cat1">cat1</option>
-                    <option value="cat2">cat2</option>
-                    <option value="cat3">cat3</option>
-                    <option value="cat4">cat4</option>
-                    <option value="cat5">cat5</option> */}
                     <CategoryList categoryList={this.state.categoryList} />
-                  {/* </Input> */}
                 </Col>
                 <Col xs="6" md="2">
                   <Button block onClick={this.toggleCat} color="secondary" className="mr-1"> Edit </Button>
