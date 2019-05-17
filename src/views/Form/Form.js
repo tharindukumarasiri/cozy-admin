@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import * as firebase from 'firebase';
 import FileUploader from "react-firebase-file-uploader";
+import CategoryList from './CategoryList';
 import {
   Button,
   Card,
@@ -56,7 +57,10 @@ class Forms extends Component {
       submit: false,
       catModel: false,
       colModel: false,
-      timModel: false
+      timModel: false,
+
+      //category list opulating
+      categoryList: []
     }
 
     this.createProduct = this.createProduct.bind(this);
@@ -65,6 +69,11 @@ class Forms extends Component {
     this.toggleCat = this.toggleCat.bind(this);
     this.toggleTim = this.toggleTim.bind(this);
     this.toggleCol = this.toggleCol.bind(this);
+  }
+
+  componentDidMount() {
+    this.db = firebase.database();
+    this.listenForChange();
   }
 
   onChangeHandler(evt, key) {
@@ -175,6 +184,26 @@ class Forms extends Component {
     });
   }
 
+  //opulating category list
+  listenForChange() {
+    this.db.ref('categories').on('child_added', snapshot => {
+      let category = {
+        id: snapshot.key,
+        name: snapshot.val().name
+      }
+
+      let categoryList = this.state.categoryList;
+      categoryList.push(category);
+
+      this.setState({
+        categoryList: categoryList
+      });
+      console.log(categoryList);
+      
+    });
+
+  }
+
   render() {
     return (
       <div className="animated fadeIn">
@@ -207,14 +236,15 @@ class Forms extends Component {
                   <Label htmlFor="select">Category</Label>
                 </Col>
                 <Col xs="12" md="7">
-                  <Input type="select" id="category" onChange={(evt) => this.onChangeHandler(evt, 'category')}>
-                    <option value="0">Please select</option>
-                    <option value="cat1">cat1</option>
+                  {/* <Input type="select" id="category" onChange={(evt) => this.onChangeHandler(evt, 'category')}>
+                    <option value="0">Please select</option> */}
+                    {/* <option value="cat1">cat1</option>
                     <option value="cat2">cat2</option>
                     <option value="cat3">cat3</option>
                     <option value="cat4">cat4</option>
-                    <option value="cat5">cat5</option>
-                  </Input>
+                    <option value="cat5">cat5</option> */}
+                    <CategoryList categoryList={this.state.categoryList} />
+                  {/* </Input> */}
                 </Col>
                 <Col xs="6" md="2">
                   <Button block onClick={this.toggleCat} color="secondary" className="mr-1"> Edit </Button>
