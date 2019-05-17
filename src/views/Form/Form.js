@@ -491,10 +491,10 @@ class Forms extends Component {
                     name="avatar"
                     randomizeFilename
                     storageRef={firebase.storage().ref("models")}
-                    onUploadStartItem={this.handleUploadStartItem}
-                    onUploadErrorItem={this.handleUploadErrorItem}
-                    onUploadSuccessItem={this.handleUploadSuccessItem}
-                    onProgressItem={this.handleProgressItem}
+                    onUploadStart={this.handleUploadStartItem}
+                    onUploadError={this.handleUploadErrorItem}
+                    onUploadSuccess={this.handleUploadSuccessItem}
+                    onProgress={this.handleProgressItem}
                   />
                 </Col>
               </FormGroup>
