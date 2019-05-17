@@ -13,7 +13,6 @@ class Products extends Component {
 
   componentDidMount() {
     this.db = firebase.database();
-
     this.listenForChange();
   }
 
