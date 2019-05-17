@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux'
-import { createProduct } from '../../store/actions/productActions'
 import * as firebase from 'firebase';
 import FileUploader from "react-firebase-file-uploader";
 import {
@@ -11,22 +9,14 @@ import {
   CardFooter,
   CardHeader,
   Col,
-  Collapse,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-  Fade,
   Form,
   FormGroup,
   FormText,
-  FormFeedback,
   Input,
   InputGroup,
   InputGroupAddon,
-  InputGroupButtonDropdown,
   InputGroupText,
   Label,
-  Row,
   Modal,
   ModalBody,
   ModalFooter,
@@ -34,60 +24,6 @@ import {
 } from 'reactstrap';
 
 class Forms extends Component {
-
-  // constructor () {
-  //   super();
-  //   this.state = {
-  //     title: '',
-  //     note: ''
-  //   }
-
-  //   this.createProduct = this.createNote.bind(this);
-  // }
-
-  // onChangeHandler (evt, key) {
-  //   this.setState({
-  //     [key]: evt.target.value
-  //   });
-  // }
-
-  // createNote () {
-  //   if (this.state.title !== '' && this.state.note !== '') {
-  //     firebase.database().ref('notes').push({
-  //       title: this.state.title,
-  //       note: this.state.note
-  //     })
-  //   }
-  // }
-
-  //   render() {
-  //     return (
-  //       <div>
-  //         <h3>Create New Note</h3>
-  //         <div className="form-group">
-  //           <label htmlFor="noteform-title">Title</label>
-  //           <input type="text" id="noteform-title" name="noteform-title" value={this.state.title} onChange={(evt) => this.onChangeHandler(evt, 'title')} />
-  //         </div>
-  //         <div className="form-group">
-  //           <label htmlFor="noteform-note">Note</label>
-  //           <textarea name="noteform-note" id="noteform-note" value={this.state.note} onChange={(evt) => this.onChangeHandler(evt, 'note')}></textarea>
-  //         </div>
-  //         <button onClick={this.createNote}>Create Note</button>
-  //       </div>
-  //     )
-  //   }
-  // }
-
-  // export default Forms;
-
-
-
-
-
-
-
-
-
   constructor(props) {
     super(props);
     this.state = {
@@ -239,57 +175,6 @@ class Forms extends Component {
       colModel: !this.state.colModel,
     });
   }
-
-  // handleChange = (e) => {
-  //   this.setState({
-  //     [e.target.id]: e.target.value
-  //   })
-  // }
-  // handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   // console.log(this.state);
-  //   this.props.createProduct(this.state);
-  //   document.getElementById("myform").reset();
-  // }
-  // handleOptionChange = changeEvent => {
-  //   this.setState({
-  //     material: changeEvent.target.value
-  //   });
-  // }
-  // handleStockChange = changeEvent => {
-  //   this.setState({
-  //     stock: changeEvent.target.value
-  //   });
-  // }
-
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //     modal: false,
-  //     large: false,
-  //     info: false,
-  //   };
-
-  //   this.toggle = this.toggle.bind(this);
-  //   this.toggleInfo = this.toggleInfo.bind(this);
-  //   this.toggleLarge = this.toggleLarge.bind(this);
-  // }
-  // toggle() {
-  //   this.setState({
-  //     modal: !this.state.modal,
-
-  //   });
-  // }
-  // toggleLarge() {
-  //   this.setState({
-  //     large: !this.state.large,
-  //   });
-  // }
-  // toggleInfo() {
-  //   this.setState({
-  //     info: !this.state.info,
-  //   });
-  // }
 
   render() {
     return (
@@ -554,11 +439,5 @@ class Forms extends Component {
     );
   }
 }
-
-// const mapDispatchToProps = dispatch => {
-//   return {
-//     createProduct: (product) => dispatch(createProduct(product))
-//   }
-// }
 
 export default Forms;
