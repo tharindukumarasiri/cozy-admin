@@ -36,8 +36,14 @@ class Products extends Component {
       this.setState({
         products: products
       });
-      console.log(products);
-      
+    });
+    this.db.ref('products').on('child_removed', snapshot => {
+      let products = this.state.products;
+      products = products.filter(product => product.id !== snapshot.key);
+
+      this.setState({
+        products: products
+      });
     });
 
   }
