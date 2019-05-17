@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import * as firebase from 'firebase';
 import FileUploader from "react-firebase-file-uploader";
 import {
-  Badge,
   Button,
   Card,
   CardBody,
