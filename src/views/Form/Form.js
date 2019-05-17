@@ -102,7 +102,6 @@ class Forms extends Component {
 
       //category
       categoryName: '',
-      categoryimage: '',
 
       //image uploads
       avatar: "",
@@ -113,6 +112,10 @@ class Forms extends Component {
       isUploadingItem: false,
       progressItem: 0,
       item: "",
+
+      isUploadingCategory: false,
+      progressCategory: 0,
+      imageCategory: "",
 
       //for modules
       submit: false,
@@ -154,12 +157,13 @@ class Forms extends Component {
   }
 
   createCategory() {
-    if (this.state.categoryName !== '' && this.state.categoryimage == '') {
-      firebase.database().ref('categorys').push({
+    if (this.state.categoryName !== '' && this.state.imageCategory !== '') {
+      firebase.database().ref('categories').push({
         name: this.state.categoryName,
-        image: this.state.categoryimage
+        image: this.state.imageCategory
       })
       this.toggleCat();
+      this.setState({ imageCategory: "" });
     }
   }
 
@@ -195,6 +199,23 @@ class Forms extends Component {
       .child(filename)
       .getDownloadURL()
       .then(url => this.setState({ item: url }))
+  };
+
+  //uploading category image
+  handleUploadStartCategory = () => this.setState({ isUploadingCategory: true, progressCategory: 0 });
+  handleProgressCategory = progressCategory => this.setState({ progressCategory });
+  handleUploadErrorCategory = error => {
+    this.setState({ isUploadingCategory: false });
+    console.error(error);
+  };
+  handleUploadSuccessCategory = filename => {
+    this.setState({ avatar: filename, progressCategory: 100, isUploadingCategory: false });
+    firebase
+      .storage()
+      .ref("categories")
+      .child(filename)
+      .getDownloadURL()
+      .then(url => this.setState({ imageCategory: url }))
   };
 
   //handling popup models
@@ -324,7 +345,18 @@ class Forms extends Component {
                       <Label htmlFor="text-input">Category Name</Label>
                       <Input type="text" id="categoryName" onChange={(evt) => this.onChangeHandler(evt, 'categoryName')} />
                       <Label htmlFor="text-input">Upload Category Image</Label> <br></br>
-                      <FileUploader></FileUploader>
+                      {this.state.isUploadingCategory && <p>Progress: {this.state.progressCategory}</p>}
+                      {this.state.imageCategory && <img src={this.state.imageCategory} border="3" height="100" width="100" />}
+                      <FileUploader
+                        accept="image/*"
+                        name="avatar"
+                        randomizeFilename
+                        storageRef={firebase.storage().ref("categories")}
+                        onUploadStart={this.handleUploadStartCategory}
+                        onUploadError={this.handleUploadErrorCategory}
+                        onUploadSuccess={this.handleUploadSuccessCategory}
+                        onProgress={this.handleProgressCategory}
+                      />
                     </ModalBody>
                     <ModalFooter>
                       <Button color="primary" type="reset" onClick={this.createCategory}>Add</Button>{' '}
