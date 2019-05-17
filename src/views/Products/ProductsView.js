@@ -34,8 +34,21 @@ import {
 export class ProductsView extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      edit: false,
+    }
+    this.toggleEdit = this.toggleEdit.bind(this);
   }
 
+  toggleEdit() {
+    this.setState({
+      edit: !this.state.edit,
+    });
+  }
+
+  removeProduct(id) {
+    firebase.database().ref('products').child(id).remove();
+  }
 
   render() {
     return (
@@ -72,8 +85,40 @@ export class ProductsView extends Component {
                     <td>{product.price}</td>
                     <td>{product.stock}</td>
                     <td>
-                      <Button color="ghost-success"><i className="icon-pencil"></i></Button>
-                      <Button color="ghost-danger"><i className="icon-close"></i></Button>
+                      <Button color="ghost-success" onClick={this.toggleEdit}><i className="icon-pencil"></i></Button>
+                      <Button color="ghost-danger" onClick={() => this.removeProduct(product.id)}><i className="icon-close"></i></Button>
+                      <Modal
+                        {...this.props}
+                        size="lg"
+                        aria-labelledby="contained-modal-title-vcenter"
+                        centered
+                        isOpen={this.state.edit} toggle={this.toggleEdit} >
+                        <ModalHeader toggle={this.toggleEdit}>
+                        Edit Product Details 
+                        <FormText color="muted">You cannot edit product code, category, material, colour or images because they are non mutable. If you want to change them please delete the relevent item and add a new one</FormText>
+                        </ModalHeader>
+                        <ModalBody>
+                          <Label htmlFor="text-input">Name</Label>
+                          <Input type="text" id="categoryName" onChange={(evt) => this.onChangeHandler(evt, 'categoryName')} />
+                          <Label htmlFor="text-input">Description</Label>
+                          <Input type="text" id="categoryName" onChange={(evt) => this.onChangeHandler(evt, 'categoryName')} />
+                          <Label htmlFor="text-input">Price</Label>
+                          <Input type="text" id="categoryName" onChange={(evt) => this.onChangeHandler(evt, 'categoryName')} />
+                          <br></br>
+                          <FormGroup check inline>
+                            <Input className="form-check-input" type="radio" id="available" name="stocks" value="Available" checked={this.state.stock === 'Available'} onChange={(evt) => this.onChangeHandler(evt, 'stock')} />
+                            <Label className="form-check-label" check htmlFor="available">Available</Label>
+                          </FormGroup>
+                          <FormGroup check inline>
+                            <Input className="form-check-input" type="radio" id="notavailable" name="stocks" value="Not Available" checked={this.state.stock === 'Not Available'} onChange={(evt) => this.onChangeHandler(evt, 'stock')} />
+                            <Label className="form-check-label" check htmlFor="notavailable">Out of Stock</Label>
+                          </FormGroup>
+                        </ModalBody>
+                        <ModalFooter>
+                          <Button color="primary" type="reset" onClick={this.createCategory}>Add</Button>{' '}
+                          <Button color="secondary" onClick={this.toggleEdit}>Cancel</Button>
+                        </ModalFooter>
+                      </Modal>
                     </td>
                   </tr>
                 </tbody>
