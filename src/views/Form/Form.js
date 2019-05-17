@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import * as firebase from 'firebase';
 import FileUploader from "react-firebase-file-uploader";
-import CategoryList from './CategoryList';
+
 import {
   Button,
   Card,
@@ -36,7 +36,7 @@ class Forms extends Component {
       description: '',
       category: '',
 
-      //category
+      //category drop down
       categoryName: '',
 
       //image uploads
@@ -101,7 +101,7 @@ class Forms extends Component {
   }
 
   createCategory() {
-    if (this.state.categoryName !== '' && this.state.imageCategory !== '') {
+    if (this.state.categoryName !== '') {
       firebase.database().ref('categories').push({
         name: this.state.categoryName,
         image: this.state.imageCategory
@@ -184,7 +184,7 @@ class Forms extends Component {
     });
   }
 
-  //opulating category list
+  //populating category list
   listenForChange() {
     this.db.ref('categories').on('child_added', snapshot => {
       let category = {
@@ -199,7 +199,7 @@ class Forms extends Component {
         categoryList: categoryList
       });
       console.log(categoryList);
-      
+
     });
 
   }
@@ -236,7 +236,12 @@ class Forms extends Component {
                   <Label htmlFor="select">Category</Label>
                 </Col>
                 <Col xs="12" md="7">
-                    <CategoryList categoryList={this.state.categoryList} />
+                  <Input type="select" id="category" onChange={(evt) => this.onChangeHandler(evt, 'category')}>
+                    <option value="0">Please select</option>
+                    {this.state.categoryList.map(category => (
+                      <option key={category.id} value={category.id} >{category.name}</option>
+                    ))}
+                  </Input>
                 </Col>
                 <Col xs="6" md="2">
                   <Button block onClick={this.toggleCat} color="secondary" className="mr-1"> Edit </Button>
