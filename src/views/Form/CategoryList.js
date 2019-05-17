@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Form from './Form';
 import {
     Badge,
     Button,
@@ -12,7 +13,7 @@ import {
     DropdownMenu,
     DropdownToggle,
     Fade,
-    Form,
+    
     FormGroup,
     FormText,
     FormFeedback,
@@ -33,17 +34,27 @@ import {
 export class CategoryList extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            category: ''
+        }
+
     }
-
-
+    onChangeHandler(evt, key) {
+        this.setState({
+            [key]: evt.target.value
+        });
+        console.log(this.state.category);
+    }
+    
     render() {
         return (
             <section>
                 <Input type="select" id="category" onChange={(evt) => this.onChangeHandler(evt, 'category')}>
                     <option value="0">Please select</option>
                     {this.props.categoryList.map(category => (
-                        <option key={category.id} value="{category.id}" >{category.name}</option>
+                        <option key={category.id} value={category.id} >{category.name}</option>
                     ))}
+                    {/* <Form category={this.state.category} /> */}
                 </Input>
             </section>
         );
