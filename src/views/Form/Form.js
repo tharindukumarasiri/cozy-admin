@@ -23,6 +23,22 @@ import {
   ModalHeader
 } from 'reactstrap';
 
+const formValid = ({ formErrors, ...rest }) => {
+  let valid = true;
+
+  // validate form errors being empty
+  Object.values(formErrors).forEach(val => {
+    val.length > 0 && (valid = false);
+  });
+
+  // validate the form was filled out
+  Object.values(rest).forEach(val => {
+    val === null && (valid = false);
+  });
+
+  return valid;
+};
+
 class Forms extends Component {
   constructor(props) {
     super(props);
@@ -60,7 +76,12 @@ class Forms extends Component {
       timModel: false,
 
       //category list poulating
-      categoryList: []
+      categoryList: [],
+
+      //For error catching 
+      formErrors: {
+        code: ''
+      }
     }
 
     this.createProduct = this.createProduct.bind(this);
@@ -77,9 +98,22 @@ class Forms extends Component {
   }
 
   onChangeHandler(evt, key) {
+    const { name, value } = evt.target;
+    let formErrors = { ...this.state.formErrors };
+
     this.setState({
       [key]: evt.target.value
     });
+
+    switch (name) {
+      case "code":
+        formErrors.code =
+          value.length < 3 ? "minimum 3 characaters required" : "";
+        break;
+      default:
+        break;
+    }
+    this.setState({ formErrors, [name]: value });
   }
 
   createProduct() {
@@ -205,6 +239,8 @@ class Forms extends Component {
   }
 
   render() {
+    const { formErrors } = this.state;
+
     return (
       <div className="animated fadeIn">
         <Form id="myform" action="" encType="multipart/form-data" className="form-horizontal" >
@@ -218,7 +254,17 @@ class Forms extends Component {
                   <Label htmlFor="text-input">Product Code</Label>
                 </Col>
                 <Col xs="12" md="9">
-                  <Input type="text" id="code" placeholder="Product Code" onChange={(evt) => this.onChangeHandler(evt, 'code')} />
+                  <Input
+                    className={formErrors.code.length > 0 ? "error" : null}
+                    type="text"
+                    id="code"
+                    name="code"
+                    placeholder="Product Code"
+                    onChange={(evt) => this.onChangeHandler(evt, 'code')}
+                  />
+                  {formErrors.code.length > 0 && (
+                    <span className="errorMessage">{formErrors.code}</span>
+                  )}
                   <FormText color="muted">Please enter the unique code in catalogue</FormText>
                 </Col>
               </FormGroup>
