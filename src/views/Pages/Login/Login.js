@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Alert, Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
 import { connect } from 'react-redux'
 import { signIn } from '../../../store/actions/authActions'
+import { Redirect } from 'react-router-dom'
 
 class Login extends Component {
   state = {
@@ -20,7 +21,8 @@ class Login extends Component {
   }
 
   render() {
-    const { authError } = this.props;
+    const { authError, auth } = this.props;
+    if (auth.uid) return <Redirect to='/' /> 
     return (
       <div className="app flex-row align-items-center">
         <Container>
@@ -101,7 +103,8 @@ class Login extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    authError: state.auth.authError
+    authError: state.auth.authError,
+    auth: state.firebase.auth
   }
 }
 
