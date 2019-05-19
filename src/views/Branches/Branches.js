@@ -34,10 +34,12 @@ class Branches extends Component {
       branches: [],
 
       //Model
-      add: false
+      add: false,
+      remove: false
     }
     this.createBranch = this.createBranch.bind(this);
     this.toggleAdd = this.toggleAdd.bind(this);
+    this.toggleRemove = this.toggleRemove.bind(this);
   }
 
   componentDidMount() {
@@ -113,10 +115,21 @@ class Branches extends Component {
 
   }
 
+  removeBranch(id) {
+    firebase.database().ref('branches').child(id).remove();
+    this.toggleRemove();
+  }
+
   //Model
   toggleAdd() {
     this.setState({
       add: !this.state.add,
+    });
+  }
+
+  toggleRemove() {
+    this.setState({
+      remove: !this.state.remove,
     });
   }
 
@@ -182,19 +195,19 @@ class Branches extends Component {
                     <td>{branch.email}</td>
                     <td>{branch.maps}</td>
                     <td>
-                      {/* <Button color="ghost-danger" onClick={() => this.removeProduct(product.id)}><i className="icon-close"></i></Button> */}
+                      <Button color="ghost-danger" onClick={this.toggleRemove}>Delete</Button>
                       <Modal
                         {...this.props}
                         size="lg"
                         aria-labelledby="contained-modal-title-vcenter"
                         centered
-                        isOpen={this.state.edit} toggle={this.toggleEdit} >
+                        isOpen={this.state.remove} toggle={this.toggleEdit} >
                         <ModalHeader toggle={this.toggleEdit}>
-                          Edit Product Details
+                          Are you sure you want to Remove this branch
                         </ModalHeader>
                         <ModalFooter>
-                          <Button color="primary" type="reset" onClick={this.createCategory}>Add</Button>{' '}
-                          <Button color="secondary" onClick={this.toggleEdit}>Cancel</Button>
+                          <Button color="danger" type="reset" onClick={() => this.removeBranch(branch.id)}>Delete</Button>{' '}
+                          <Button color="secondary" onClick={this.toggleRemove}>Cancel</Button>
                         </ModalFooter>
                       </Modal>
                     </td>
