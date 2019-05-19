@@ -23,6 +23,10 @@ import {
   ModalHeader
 } from 'reactstrap';
 
+const priceRegex = RegExp(
+  /[0-9]/
+);
+
 const formValid = ({ formErrors, ...rest }) => {
   let valid = true;
 
@@ -80,7 +84,8 @@ class Forms extends Component {
 
       //For error catching 
       formErrors: {
-        code: ''
+        code: '',
+        price: ''
       }
     }
 
@@ -108,7 +113,12 @@ class Forms extends Component {
     switch (name) {
       case "code":
         formErrors.code =
-          value.length < 3 ? "minimum 3 characaters required" : "";
+          value.length < 4 ? "minimum 4 characaters required" : "";
+        break;
+      case "price":
+        formErrors.price = priceRegex.test(value)
+          ? ""
+          : "invalid price value";
         break;
       default:
         break;
@@ -424,15 +434,25 @@ class Forms extends Component {
                 <Col md="2">
                   <Label htmlFor="prependedInput">Price</Label>
                 </Col>
-                <Col md="6">
-                  <div className="controls">
+                <Col xs="12" md="9">
+                  {/* <div className="controls"> */}
                     <InputGroup className="input-prepend">
                       <InputGroupAddon addonType="prepend">
                         <InputGroupText>Rs.</InputGroupText>
                       </InputGroupAddon>
-                      <Input id="price" size="16" type="text" onChange={(evt) => this.onChangeHandler(evt, 'price')} />
+                      <Input
+                        className={formErrors.price.length > 0 ? "error" : null}
+                        id="price"
+                        // size="16"
+                        type="number"
+                        name="price"
+                        onChange={(evt) => this.onChangeHandler(evt, 'price')}
+                      />
                     </InputGroup>
-                  </div>
+                    {formErrors.price.length > 0 && (
+                        <span className="errorMessage">{formErrors.price}</span>
+                      )}
+                  {/* </div> */}
                 </Col>
               </FormGroup>
               <FormGroup row>
