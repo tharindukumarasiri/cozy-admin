@@ -26,11 +26,18 @@ class Login extends Component {
         <Container>
           <Row className="justify-content-center">
             <Col md="8">
+              <Card>
+                <CardBody className="text-center">
+                  <Col xs="6" md="12">
+                    <img src={'../../assets/img/logobig.jpg'}  />
+                  </Col>
+                </CardBody>
+              </Card>
               <CardGroup>
                 <Card className="p-4">
                   <CardBody>
                     <Form onSubmit={this.handleSubmit}>
-                      <h1>Login</h1>
+                      <h3>Login</h3>
                       <p className="text-muted">Sign In to your account</p>
                       <InputGroup className="mb-3">
                         <InputGroupAddon addonType="prepend">
