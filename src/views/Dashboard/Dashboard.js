@@ -23,6 +23,9 @@ import {
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
 import { getStyle, hexToRgba } from '@coreui/coreui/dist/js/coreui-utilities'
 
+import { Redirect } from 'react-router-dom'
+import { connect } from 'react-redux'
+
 const Widget03 = lazy(() => import('../../views/Widgets/Widget03'));
 
 const brandPrimary = getStyle('--primary')
@@ -480,6 +483,8 @@ class Dashboard extends Component {
   loading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>
 
   render() {
+    const {auth } = this.props;
+    if (!auth.uid) return <Redirect to='/login' /> 
 
     return (
       <div className="animated fadeIn">
@@ -793,5 +798,12 @@ class Dashboard extends Component {
     );
   }
 }
+const mapStateToProps = (state) => {
+  // console.log(state);
+  return {
+    projects: state.firestore.ordered.projects,
+    auth: state.firebase.auth
+  }
+}
 
-export default Dashboard;
+export default connect(mapStateToProps)(Dashboard);
