@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { Button, Card, CardBody, CardFooter, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row, Alert } from 'reactstrap';
-import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { signUp } from '../../../store/actions/authActions'
+
+var picstyle = {
+  padding: "45px",
+};
 
 class Register extends Component {
   state = {
@@ -29,8 +32,11 @@ class Register extends Component {
             <Col md="9" lg="7" xl="6">
               <Card className="mx-4">
                 <CardBody className="p-4">
+                  <Col xs="2" md="6">
+                    <img src={'../../assets/img/logoreg.jpg'} style={picstyle}/>
+                  </Col>
                   <Form onSubmit={this.handleSubmit}>
-                    <h1>Register</h1>
+                    <h4>Register</h4>
                     <p className="text-muted">Create your account</p>
                     <InputGroup className="mb-3">
                       <InputGroupAddon addonType="prepend">
@@ -74,12 +80,12 @@ class Register extends Component {
                   </Form>
                   <br></br>
                   <Row>
-                        <Col xs="12">
-                          <div className="center red-text">
-                          { authError ? <Alert color="danger">{authError}</Alert> : null }
-                          </div>
-                        </Col>
-                      </Row>
+                    <Col xs="12">
+                      <div className="center red-text">
+                        {authError ? <Alert color="danger">{authError}</Alert> : null}
+                      </div>
+                    </Col>
+                  </Row>
                 </CardBody>
                 <CardFooter className="p-4">
                   <Row>
@@ -108,7 +114,7 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = (dispatch)=> {
+const mapDispatchToProps = (dispatch) => {
   return {
     signUp: (creds) => dispatch(signUp(creds))
   }
