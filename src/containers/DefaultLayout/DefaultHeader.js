@@ -17,11 +17,10 @@ const propTypes = {
 
 const defaultProps = {};
 
-class DefaultHeader extends Component {
-  render() {
+const DefaultHeader = (props) => {
+ 
 
-    // eslint-disable-next-line
-    const { children, ...attributes } = this.props;
+   
 
     return (
       <React.Fragment>
@@ -50,7 +49,7 @@ class DefaultHeader extends Component {
             </DropdownToggle>
             <DropdownMenu right style={{ right: 'auto' }}>
               <DropdownItem header tag="div" className="text-center"><strong>Account</strong></DropdownItem>
-              <DropdownItem onClick={e => this.props.onLogout(e)}><i className="fa fa-lock"></i> Logout</DropdownItem>
+              <DropdownItem onClick={props.signOut}><i className="fa fa-lock"></i> Logout</DropdownItem>
             </DropdownMenu>
           </AppHeaderDropdown>
         </Nav>
@@ -58,17 +57,16 @@ class DefaultHeader extends Component {
         {/*<AppAsideToggler className="d-lg-none" mobile />*/}
       </React.Fragment>
     );
-  }
+  
 }
 
 DefaultHeader.propTypes = propTypes;
 DefaultHeader.defaultProps = defaultProps;
 
-const mapStateToProps = (state) => {
-  console.log(state);
-  return{
-    auth: state.firebase.auth
+const mapDispatchToProps = (dispatch) => {
+  return {
+    signOut: () => dispatch(signOut())
   }
 }
 
-export default connect(mapStateToProps)(DefaultHeader);
+export default connect(null, mapDispatchToProps)(DefaultHeader);
