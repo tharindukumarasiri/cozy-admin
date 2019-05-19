@@ -31,11 +31,18 @@ class Branches extends Component {
       email: '',
       maps: '',
 
+      branches: [],
+
       //Model
-      add: false,
+      add: false
     }
     this.createBranch = this.createBranch.bind(this);
     this.toggleAdd = this.toggleAdd.bind(this);
+  }
+
+  componentDidMount() {
+    this.db = firebase.database();
+    this.listenForChange();
   }
 
   onChangeHandler(evt, key) {
@@ -74,6 +81,36 @@ class Branches extends Component {
       })
       this.toggleAdd();
     }
+  }
+
+  listenForChange() {
+    this.db.ref('branches').on('child_added', snapshot => {
+      let branch = {
+        id: snapshot.key,
+        code: snapshot.val().code,
+        name: snapshot.val().name,
+        number: snapshot.val().number,
+        address: snapshot.val().address,
+        email: snapshot.val().email,
+        maps: snapshot.val().maps,
+      }
+
+      let branches = this.state.branches;
+      branches.push(branch);
+
+      this.setState({
+        branches: branches
+      });
+    });
+    this.db.ref('branches').on('child_removed', snapshot => {
+      let branches = this.state.branches;
+      branches = branches.filter(branche => branche.id !== snapshot.key);
+
+      this.setState({
+        branches: branches
+      });
+    });
+
   }
 
   //Model
@@ -118,9 +155,9 @@ class Branches extends Component {
         <br />
 
         <Card>
-          <CardHeader>
-            <i className="fa fa-align-justify" /> Branches
-          </CardHeader>
+          <CardHeader >
+            <i className="fa fa-align-justify"></i> Branches
+            </CardHeader>
           <CardBody>
             <Table responsive>
               <thead>
@@ -130,57 +167,42 @@ class Branches extends Component {
                   <th>Contact Number</th>
                   <th>Address</th>
                   <th>Email</th>
-                  <th>Google Maps</th>
+                  <th>Maps</th>
+                  <th>Remove Branch</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td>Samppa Nori</td>
-                  <td>2012/01/01</td>
-                  <td>Member</td>
-                </tr>
-                <tr>
-                  <td>Estavan Lykos</td>
-                  <td>2012/02/01</td>
-                  <td>Staff</td>
-                </tr>
-                <tr>
-                  <td>Chetan Mohamed</td>
-                  <td>2012/02/01</td>
-                  <td>Admin</td>
-                </tr>
-                <tr>
-                  <td>Derick Maximinus</td>
-                  <td>2012/03/01</td>
-                  <td>Member</td>
-                </tr>
-                <tr>
-                  <td>Friderik Dávid</td>
-                  <td>2012/01/21</td>
-                  <td>Staff</td>
-                </tr>
-              </tbody>
+
+              {this.state.branches.map(branch => (
+                <tbody>
+                  <tr key={branch.id}>
+                    <td>{branch.code}</td>
+                    <td>{branch.name}</td>
+                    <td>{branch.number}</td>
+                    <td>{branch.address}</td>
+                    <td>{branch.email}</td>
+                    <td>{branch.maps}</td>
+                    <td>
+                      {/* <Button color="ghost-danger" onClick={() => this.removeProduct(product.id)}><i className="icon-close"></i></Button> */}
+                      <Modal
+                        {...this.props}
+                        size="lg"
+                        aria-labelledby="contained-modal-title-vcenter"
+                        centered
+                        isOpen={this.state.edit} toggle={this.toggleEdit} >
+                        <ModalHeader toggle={this.toggleEdit}>
+                          Edit Product Details
+                        </ModalHeader>
+                        <ModalFooter>
+                          <Button color="primary" type="reset" onClick={this.createCategory}>Add</Button>{' '}
+                          <Button color="secondary" onClick={this.toggleEdit}>Cancel</Button>
+                        </ModalFooter>
+                      </Modal>
+                    </td>
+                  </tr>
+                </tbody>
+              ))}
             </Table>
-            <Pagination>
-              <PaginationItem>
-                <PaginationLink previous tag="button" />
-              </PaginationItem>
-              <PaginationItem active>
-                <PaginationLink tag="button">1</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink tag="button">2</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink tag="button">3</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink tag="button">4</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink next tag="button" />
-              </PaginationItem>
-            </Pagination>
+
           </CardBody>
         </Card>
       </div>
