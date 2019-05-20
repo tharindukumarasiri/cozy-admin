@@ -36,8 +36,10 @@ export class ProductsView extends Component {
     super(props);
     this.state = {
       edit: false,
+      remove: false
     }
     this.toggleEdit = this.toggleEdit.bind(this);
+    this.toggleRemove = this.toggleRemove.bind(this);
   }
 
   toggleEdit() {
@@ -46,8 +48,15 @@ export class ProductsView extends Component {
     });
   }
 
+  toggleRemove() {
+    this.setState({
+      remove: !this.state.remove,
+    });
+  }
+
   removeProduct(id) {
     firebase.database().ref('products').child(id).remove();
+    this.toggleRemove();
   }
 
   render() {
@@ -117,6 +126,21 @@ export class ProductsView extends Component {
                         <ModalFooter>
                           <Button color="primary" type="reset" onClick={this.createCategory}>Add</Button>{' '}
                           <Button color="secondary" onClick={this.toggleEdit}>Cancel</Button>
+                        </ModalFooter>
+                      </Modal>
+
+                      <Modal
+                        {...this.props}
+                        size="lg"
+                        aria-labelledby="contained-modal-title-vcenter"
+                        centered
+                        isOpen={this.state.remove} toggle={this.toggleEdit} >
+                        <ModalHeader toggle={this.toggleEdit}>
+                          Are you sure you want to Remove this product
+                        </ModalHeader>
+                        <ModalFooter>
+                          <Button color="danger" onClick={() => this.removeProduct(product.id)}>Delete</Button>{' '}
+                          <Button color="secondary" onClick={this.toggleRemove}>Cancel</Button>
                         </ModalFooter>
                       </Modal>
                     </td>
