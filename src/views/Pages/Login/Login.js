@@ -70,7 +70,7 @@ class Login extends Component {
                         <Col xs="12">
                           <div className="center red-text">
                             {authError ? <Alert color="danger">
-                              Wrong Username or Passwoard!
+                              Wrong Username or Password!
                         </Alert> : null}
                           </div>
                         </Col>
