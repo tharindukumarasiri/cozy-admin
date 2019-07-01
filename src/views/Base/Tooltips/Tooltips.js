@@ -60,14 +60,7 @@ class Tooltips extends Component {
     };
   }
 
-  toggle(i) {
-    const newArray = this.state.tooltipOpen.map((element, index) => {
-      return (index === i ? !element : false);
-    });
-    this.setState({
-      tooltipOpen: newArray,
-    });
-  }
+  
 
   render() {
     return (
