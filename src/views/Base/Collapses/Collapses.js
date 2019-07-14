@@ -3,25 +3,7 @@ import { Badge, Button, Card, CardBody, CardFooter, CardHeader, Col, Collapse, F
 
 class Collapses extends Component {
 
-  constructor(props) {
-    super(props);
-    this.onEntering = this.onEntering.bind(this);
-    this.onEntered = this.onEntered.bind(this);
-    this.onExiting = this.onExiting.bind(this);
-    this.onExited = this.onExited.bind(this);
-    this.toggle = this.toggle.bind(this);
-    this.toggleAccordion = this.toggleAccordion.bind(this);
-    this.toggleCustom = this.toggleCustom.bind(this);
-    this.toggleFade = this.toggleFade.bind(this);
-    this.state = {
-      collapse: false,
-      accordion: [true, false, false],
-      custom: [true, false],
-      status: 'Closed',
-      fadeIn: true,
-      timeout: 300,
-    };
-  }
+  
 
   onEntering() {
     this.setState({ status: 'Opening...' });
