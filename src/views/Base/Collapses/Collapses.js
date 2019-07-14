@@ -5,50 +5,7 @@ class Collapses extends Component {
 
   
 
-  onEntering() {
-    this.setState({ status: 'Opening...' });
-  }
-
-  onEntered() {
-    this.setState({ status: 'Opened' });
-  }
-
-  onExiting() {
-    this.setState({ status: 'Closing...' });
-  }
-
-  onExited() {
-    this.setState({ status: 'Closed' });
-  }
-
-  toggle() {
-    this.setState({ collapse: !this.state.collapse });
-  }
-
-  toggleAccordion(tab) {
-
-    const prevState = this.state.accordion;
-    const state = prevState.map((x, index) => tab === index ? !x : false);
-
-    this.setState({
-      accordion: state,
-    });
-  }
-
-  toggleCustom(tab) {
-
-    const prevState = this.state.custom;
-    const state = prevState.map((x, index) => tab === index ? !x : false);
-
-    this.setState({
-      custom: state,
-    });
-  }
-
-  toggleFade() {
-    this.setState({ fadeIn: !this.state.fadeIn });
-  }
-
+  
   render() {
     return (
       <div className="animated fadeIn">
