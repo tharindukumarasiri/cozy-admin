@@ -26,7 +26,7 @@ import { getStyle, hexToRgba } from '@coreui/coreui/dist/js/coreui-utilities'
 import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-const Widget03 = lazy(() => import('../../views/Widgets/Widget03'));
+// const Widget03 = lazy(() => import('../../views/Widgets/Widget03'));
 
 const brandPrimary = getStyle('--primary')
 const brandSuccess = getStyle('--success')
